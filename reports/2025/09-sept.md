@@ -4,6 +4,7 @@ TLDR:
 
 - Fusaka hardening and testing continued.
 - First EEST full releases for Osaka including all `GeneralStateTests` from ethereum/tests adhering to EIP-7825 Transaction Gas Limit Cap [v5.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/v5.0.0), [v5.1.0](https://github.com/ethereum/execution-spec-tests/releases/tag/v5.1.0) [v5.2.0](https://github.com/ethereum/execution-spec-tests/releases/tag/v5.2.0).
+- Second EELS release for Osaka, and first preview of the Weld.
 - [Glamsterdam](https://forkcast.org/upgrade/glamsterdam/) efforts ramped up with 2 [EIP-7928](https://forkcast.org/upgrade/glamsterdam/#eip-7928) Block-level Access Lists test vector [pre-releases](https://eest.ethereum.org/main/running_tests/releases/#pre-release-and-devnet-releases): [v1.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v1.0.0), [v1.0.1](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v1.0.1).
 - Scale the L1: Bloatnet testing gained momentum [ethereum/execution-spec-tests#2090](https://github.com/ethereum/execution-spec-tests/pull/2090) and benchmarking infra improvements to abstract the tx gas limit and ease test case implementation [ethereum/execution-spec-tests#1945](https://github.com/ethereum/execution-spec-tests/pull/1945).
 - [ethereum/py-evm](https://github.com/ethereum/py-evm) was [sunsetted](https://snakecharmers.ethereum.org/sunsetting-support-for-py-evm/).
@@ -42,6 +43,9 @@ Significant progress on the Weld to combine [EELS](https://github.com/ethereum/e
 
 - EEST's `fill` command now has a watch-mode to watch for changes in the test files to automatically re-fill tests on changes: [#2173](https://github.com/ethereum/execution-spec-tests/pull/2173).
 - Code-quality: Add `ARG001` check to EEST library code to ensure there's no unused function parameters: [#2166](https://github.com/ethereum/execution-spec-tests/pull/2166).
+- Slightly reduced memory consumption while filling EEST tests with EELS.
+- Moved network upgrade summaries into the EELS specification.
+- Preliminary support for dynamically generating BPO forks in EELS.
 
 ## Sessions
 
