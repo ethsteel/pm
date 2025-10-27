@@ -2,9 +2,11 @@
 
 Link: https://eips.ethereum.org/EIPS/eip-NNNN
 
-## Execution Spec Tests
+# Execution Specs
 
-### Complexity Assessment
+## Specs
+
+## Testing
 
 **Scoring rubric per row (0–3):**
 - **0**: Not applicable, this spec change does not affect this area at all  
@@ -38,29 +40,12 @@ Link: https://eips.ethereum.org/EIPS/eip-NNNN
 | **New fork activation mechanism** | Modifies state, internal variables, or similar, at the fork activation block | 2.5 | [ ] | [ ] |
 | **Performance risks** | Introduces or modifies mechanisms and requires performance validation | 1.0 | [ ] | [ ] |
 
-> **Weighted total** = Σ(Multiplier × score).
-> **Maximum total** = 90.
+## Notes
 
-**Subtotal (Σ weights × scores):** **[ ]**
+# Consensus Specs
 
-### Notes
+## Specs
 
-### Gates
-Any of the following gates results in automatic complexity increment.
+## Testing
 
-- [ ] EIP affects 20% or more of the pre-existing tests.
-
-#### Legend:
-
-✅: Gate is not triggered
-❌: Gate is triggered
-
-### Color thresholds (by weighted subtotal)
-- **🟢**: ≤ 10% of max (and all Gates ✅)
-- **🟡**: 10–25% of max (and all Gates ✅)
-- **🟠**: 25–50% of max **or** any Gate ❌
-- **🔴**: > 50% of max **or** any Gate ❌
-
-## Consensus Spec Tests
-
-TBD
+## Notes
