@@ -243,8 +243,8 @@ Introduces or modifies mechanisms and requires performance validation.
 
 | Tier | Range | Meaning |
 |------|--------|----------|
-| 🟢 **Low Complexity** | **< 10** | Minor feature or localized change. Existing tests are largely unaffected. Does not require intensive cross-EIP testing. |
-| 🟡 **Medium Complexity** | **>= 10<20** | Moderate change affecting multiple components. Requires moderate cross-EIP testing. |
+| 🟢 **Low Complexity** | **<10** | Minor feature or localized change. Existing tests are largely unaffected. Does not require intensive cross-EIP testing. |
+| 🟡 **Medium Complexity** | **>=10<20** | Moderate change affecting multiple components. Requires moderate cross-EIP testing. |
 | 🔴 **High Complexity** | **>=20** | Broad or deep impact on protocol behavior; high regression risk; and/or requiring intensive cross-EIP testing. |
 
 
