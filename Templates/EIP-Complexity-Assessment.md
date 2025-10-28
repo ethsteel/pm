@@ -172,7 +172,7 @@ Modifies pre-existing transaction types' validation mechanisms
 - 0. No changes are introduced to the validity rules of existing transaction types or to their intrinsic gas cost calculation.
 - 1. Minor adjustments are introduced to validity rules or intrinsic gas cost calculation, but they do not significantly affect existing tests.
 - 2. Changes to validity rules or intrinsic gas cost calculation affect existing tests, but require only limited updates to test cases and no redesign of the testing infrastructure.
-- 3. Changes to validity rules or intrinsic gas cost calculation require extensive rework or redesign of the testing infrastructure.
+- 3. Changes to validity rules or intrinsic gas cost calculation require extensive rework or redesign of the tests or testing infrastructure.
 
 #### New block / header fields
 
@@ -198,6 +198,24 @@ Introduces or modifies mechanisms and requires performance validation.
 - 1. The introduced mechanisms can be benchmarked in isolation and do not affect existing performance behavior.
 - 2. The introduced mechanisms cannot be fully benchmarked in isolation, but they only have a limited impact on the existing performance benchmarks.
 - 3. The introduced mechanisms cannot be benchmarked in isolation and have a substantial impact on existing performance benchmarks or have complex interactions with existing mechanisms.
+
+#### Security risks
+
+Introduces or modifies mechanisms that could compromise the security of the chain, users, validators, or other stakeholders, if not implemented properly.
+
+- 0. No new mechanisms are introduced that could pose a security risk.
+- 1. The introduced mechanisms are self-contained, can be validated in isolation, and do not alter existing invariants that could pose a security risk for any stakeholders.
+- 2. The introduced mechanisms interact with a limited number of existing components, slightly altering their security assumptions and requiring a targeted security review or fuzzing.
+- 3. The introduced mechanisms interact with multiple existing components, including critical ones, substantially altering their security assumptions and requiring an extensive security review and fuzzing.
+
+#### Cross-EIP interactions
+
+Introduces or modifies mechanisms that affect other EIPs in either the same or past forks.
+
+- 0. Fully self-contained EIP that does not depend on, modify, or conflict with any other EIP.
+- 1. The EIP interacts with one or more other EIPs in a non-critical and limited way but can be tested independently for the most part.
+- 2. The EIP depends on or modifies one or more other EIPs such that coordinated testing and consideration is required, but interactions are limited in scope and not complex.
+- 3. The EIP has strong interdependencies with multiple EIPs, requiring extensive coordinated cross-EIP testing as well as potential re-design of existing test vectors.
 
 ### Checklist
 
@@ -225,6 +243,8 @@ Introduces or modifies mechanisms and requires performance validation.
 | **New block / header fields** |   |
 | **New fork activation mechanism** |   |
 | **Performance risks** |   |
+| **Security risks** |   |
+| **Cross-EIP interactions** |   |
 
 **Total: X**
 
@@ -236,7 +256,7 @@ Introduces or modifies mechanisms and requires performance validation.
 
 | Category | Description | Value |
 |-----------|--------------|:----:|
-| **Total Score** | Sum of all anchor scores (0–66) | **`XX`** |
+| **Total Score** | Sum of all anchor scores (0–72) | **`XX`** |
 | **Complexity Tier** | Computed from total score | 🟢 / 🟡 / 🔴 |
 
 #### Tier Interpretation
