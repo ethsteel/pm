@@ -196,7 +196,7 @@ Introduces or modifies mechanisms and requires performance validation.
 
 - 0. No new mechanisms are introduced that require performance validation.
 - 1. The introduced mechanisms can be benchmarked in isolation and do not affect existing performance behavior.
-- 2. The introduced mechanisms cannot be fully benchmarked in isolation, or they have a limited impact on existing performance benchmarks.
+- 2. The introduced mechanisms cannot be fully benchmarked in isolation, but they only have a limited impact on the existing performance benchmarks.
 - 3. The introduced mechanisms cannot be benchmarked in isolation and have a substantial impact on existing performance benchmarks or have complex interactions with existing mechanisms.
 
 ### Checklist
