@@ -165,9 +165,9 @@ Introduces a new transaction type
 - 0. No new transaction types are introduced.
 - 3. A new transaction type is introduced.
 
-#### New transaction validity mechanisms
+#### New or modified transaction validity mechanisms
 
-Modifies pre-existing transaction types' validation mechanisms 
+Creates new or modifies pre-existing transaction types' validation mechanisms 
 
 - 0. No changes are introduced to the validity rules of existing transaction types or to their intrinsic gas cost calculation.
 - 1. Minor adjustments are introduced to validity rules or intrinsic gas cost calculation, but they do not significantly affect existing tests.
@@ -219,32 +219,32 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 ### Checklist
 
-| Anchor | Score (0–3) |
-|---|---:|
-| **EVM Gas rule changes** |   |
-| **Blob gas accounting changes** |   |
-| **New EVM gas refund** |   |
-| **Patterns affecting pre-existing tests** |   |
-| **Transition-tool interface changes** |   |
-| **Cryptography-related testing** |   |
-| **Edge/boundary conditions** |   |
-| **Block syncing changes** |   |
-| **Engine API changes** |   |
-| **Engine API encoding changes** |   |
-| **Added system contracts** |   |
-| **Modified system contracts** |   |
-| **Added opcodes** |   |
-| **Modified opcodes** |   |
-| **Added precompiles** |   |
-| **Modified precompiles** |   |
-| **Encoding changes (RLP/SSZ)** |   |
-| **New transaction types** |   |
-| **New transaction validity mechanisms** |   |
-| **New block / header fields** |   |
-| **New fork activation mechanism** |   |
-| **Performance risks** |   |
-| **Security risks** |   |
-| **Cross-EIP interactions** |   |
+| Anchor | Score (0–3) | Rationale |
+|---|---:|---|
+| **EVM Gas rule changes** |   |   |
+| **Blob gas accounting changes** |   |   |
+| **New EVM gas refund** |   |   |
+| **Patterns affecting pre-existing tests** |   |   |
+| **Transition-tool interface changes** |   |   |
+| **Cryptography-related testing** |   |   |
+| **Edge/boundary conditions** |   |   |
+| **Block syncing changes** |   |   |
+| **Engine API changes** |   |   |
+| **Engine API encoding changes** |   |   |
+| **Added system contracts** |   |   |
+| **Modified system contracts** |   |   |
+| **Added opcodes** |   |   |
+| **Modified opcodes** |   |   |
+| **Added precompiles** |   |   |
+| **Modified precompiles** |   |   |
+| **Encoding changes (RLP/SSZ)** |   |   |
+| **New transaction types** |   |   |
+| **New or modified transaction validity mechanisms** |   |   |
+| **New block / header fields** |   |   |
+| **New fork activation mechanism** |   |   |
+| **Performance risks** |   |   |
+| **Security risks** |   |   |
+| **Cross-EIP interactions** |   |   |
 
 **Total: X**
 
