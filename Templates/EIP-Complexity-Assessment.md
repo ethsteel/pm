@@ -252,6 +252,10 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 > Evaluator must write here special considerations that make the EIP particularly complex to test due to reasons not directly included in this checklist.
 
+### Notes
+
+> Evaluator notes that do not affect the score but are valid points that must be taken into consideration when the tests are being written. 
+
 ### Final Assessment
 
 | Category | Description | Value |
