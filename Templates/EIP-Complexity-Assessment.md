@@ -20,8 +20,8 @@ New EVM gas accounting rules
 
 - 0. No gas accounting changes.
 - 1. Existing gas accounting mechanism is updated.
-- 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor it affects existing tests.
-- 3. A new gas accounting mechanism is introduced and affects existing mechanisms which affects existing tests.
+- 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
+- 3. A new gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
 
 #### Blob gas accounting changes
 
@@ -29,8 +29,8 @@ New Blob gas accounting rules which potentially affect pre-existing tests
 
 - 0. No blob gas accounting changes.
 - 1. Existing blob gas accounting mechanism is updated.
-- 2. A new blob gas accounting mechanism is introduced but it does not affect existing mechanisms nor it affects existing tests.
-- 3. A new blob gas accounting mechanism is introduced and affects existing mechanisms which affects existing tests.
+- 2. A new blob gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
+- 3. A new blob gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
 
 #### New EVM gas refund
 
@@ -47,7 +47,7 @@ Implements a new validation mechanism or rule that translates in reworking pre-e
 
 - 0. No pre-existing tests are affected by this change.
 - 1. Minor subset of existing tests are affected by this change.
-- 2. Considreable subset of existing tests are affected by this change but involves a contrived category of tests.
+- 2. Considerable subset of existing tests are affected by this change but involves only a contrived category of tests.
 - 3. Major subset of existing tests are affected, including diverse category of tests (benchmarks, static, multiple forks, etc.).
 
 #### Transition-tool interface changes
@@ -67,7 +67,7 @@ Introduces new cryptography mechanisms or modifies existing functionality that i
 
 - 0. No cryptography mechanisms are introduced.
 - 1. A new cryptography mechanism is introduced but it is a well known mechanism that is known to have vast resources to aid on its testing.
-- 2. Multiple new cryptography mechanisms are introduced that are well-known or a single but novel mechanism is introduced that it's either untested or has limited resources.
+- 2. Multiple new cryptography mechanisms are introduced that are well-known or a single but novel mechanism is introduced that is either untested or has limited resources.
 - 3. Multiple new cryptography mechanisms are introduced and at least one of them is a novel mechanism.
 
 #### Edge/boundary conditions
@@ -81,10 +81,10 @@ Feature contains edge/boundary conditions.
 
 #### Block syncing changes
 
-Modifies block RLP validation mechanisms that requires test client syncing.
+Modifies block RLP validation mechanisms that require test client syncing.
 
 - 0. No new RLP validation mechanism is introduced.
-- 1. A single new simple RLP validation mechanism is introduced.
+- 1. A single simple RLP validation mechanism is introduced.
 - 2. Multiple simple RLP validation mechanisms are introduced or a single complex one.
 - 3. Multiple RLP validation mechanisms are introduced and at least one of them is deemed complex.
 
@@ -93,7 +93,7 @@ Modifies block RLP validation mechanisms that requires test client syncing.
 Introduces new fields to the Engine API directives
 
 - 0. No new fields or communication mechanisms are introduced to the Engine API.
-- 1. A single new field is introduced in one of the Engine API end-points.
+- 1. A single new field is introduced in one of the Engine API endpoints.
 - 2. Multiple fields are introduced to one or multiple Engine API end points, or a new Engine API end-point is introduced.
 - 3. Multiple fields are introduced to one or multiple Engine API end points and a new Engine API end-point is introduced.
 
@@ -111,7 +111,7 @@ Introduces new system contract, stateful or not
 Modifies pre-existing system contracts 
 
 - 0. No modifications to pre-existing system contracts are introduced.
-- 3. At least one pre-existing system contract is modified, which would involve irregular state transition or a similary complex transition methodology.
+- 3. At least one pre-existing system contract is modified, which would involve irregular state transition or a similarly complex transition methodology.
 
 #### Added opcodes
 
@@ -122,7 +122,7 @@ Introduces new opcodes
 - 2. Multiple new simple opcodes are introduced, or a single new complex opcode is introduced (has data portion, or complex stack mechanics, or a dynamic gas cost).
 - 3. Multiple new opcodes are introduced, and at least one of them is complex (has data portion, or complex stack mechanics, or a dynamic gas cost).
 
-*Cryptography opcodes are not considered complex by default. Refer to the "Cryptography" for a separate assessment.
+*Cryptography opcodes are not considered complex by default. Refer to the "Cryptography" section for a separate assessment.
 
 #### Modified opcodes
 
@@ -186,9 +186,9 @@ Introduces new block or block header fields
 Modifies state, internal variables, or similar, at the fork activation block 
 
 - 0. No state modifications, internal variables or similar are modified at the fork activation block.
-- 3. Either a state modification or an internal variable is modified at the fork activation block.
+- 3. Either a state modification or internal variables are modified at the fork activation block.
 
-*Initialization of new internal variable is not considered modification.
+*Initialization of new internal variable is not considered a modification.
 
 #### Performance risks
 
