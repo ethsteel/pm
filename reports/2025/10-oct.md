@@ -25,7 +25,7 @@ Remaining open tasks:
 
 ## Fusaka
 
-- Sync simulator has been fixed after being flaky in the past months through a series of PRs: [#2252](https://github.com/ethereum/execution-spec-tests/pull/2252), [#2272](https://github.com/ethereum/execution-spec-tests/pull/2272), [#1670](https://github.com/ethereum/execution-specs/pull/1670)
+- Sync simulator has been fixed after being flaky in the past months through a series of PRs: [ethereum/execution-spec-tests#2252](https://github.com/ethereum/execution-spec-tests/pull/2252), [ethereum/execution-spec-tests#2272](https://github.com/ethereum/execution-spec-tests/pull/2272), [ethereum/execution-specs#1670](https://github.com/ethereum/execution-specs/pull/1670)
 
 ## Glamsterdam
 
@@ -33,7 +33,9 @@ Remaining open tasks:
 - Kept up with breakout conversations by updating specs and test vectors for clients and cutting releases.
 - New test releases: https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v1.2.0, https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v1.3.0
 - Following release is expected to contain every `execution-specs` (prev. `execution-spec-tests`) test filled with BAL functionality enabled (previously they only contained targeted tests).
-- Multiple test cases, fixes, and improvements added: [#2297](https://github.com/ethereum/execution-spec-tests/pull/2297), [#2293](https://github.com/ethereum/execution-spec-tests/pull/2293), [#2280](https://github.com/ethereum/execution-spec-tests/pull/2280), [#2212](https://github.com/ethereum/execution-spec-tests/pull/2212)
+- Multiple test cases, fixes, and improvements added:
+  - Tests: [ethereum/execution-spec-tests#2297](https://github.com/ethereum/execution-spec-tests/pull/2297), [ethereum/execution-spec-tests#2293](https://github.com/ethereum/execution-spec-tests/pull/2293), [ethereum/execution-spec-tests#2280](https://github.com/ethereum/execution-spec-tests/pull/2280), [ethereum/execution-spec-tests#2212](https://github.com/ethereum/execution-spec-tests/pull/2212)
+  - Specs: [fselmo/execution-specs#16](https://github.com/fselmo/execution-specs/pull/16), [fselmo/execution-specs#17](https://github.com/fselmo/execution-specs/pull/17), [fselmo/execution-specs#18](https://github.com/fselmo/execution-specs/pull/18), [fselmo/execution-specs#22](https://github.com/fselmo/execution-specs/pull/22), [fselmo/execution-specs#23](https://github.com/fselmo/execution-specs/pull/23), [fselmo/execution-specs#25](https://github.com/fselmo/execution-specs/pull/25), [fselmo/execution-specs#29](https://github.com/fselmo/execution-specs/pull/29), [ethereum/execution-specs#1722](https://github.com/ethereum/execution-specs/pull/1722)
 
 ## Consensus Specs
 
