@@ -2,28 +2,27 @@
 
 Link: https://eips.ethereum.org/EIPS/eip-NNNN
 
-# Execution Specs
+## Execution Specs
 
-## Specs
+### Specs
 
 TBD
 
-## Testing
+### Testing
 
-### Anchors
+#### Anchors
 
 All anchors are scored on a 0–3 scale. A score of 4 may be used in exceptional circumstances where the complexity or impact exceeds the defined anchors.
 
-#### EVM Gas rule changes
+##### EVM Gas rule changes
 
-New EVM gas accounting rules 
-
+New EVM gas accounting rules
 - 0. No gas accounting changes.
 - 1. Existing gas accounting mechanism is updated.
 - 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
 - 3. A new gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
 
-#### Blob gas accounting changes
+##### Blob gas accounting changes
 
 New Blob gas accounting rules which potentially affect pre-existing tests
 
@@ -32,45 +31,45 @@ New Blob gas accounting rules which potentially affect pre-existing tests
 - 2. A new blob gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
 - 3. A new blob gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
 
-#### New EVM gas refund
+##### New EVM gas refund
 
-New gas-refund mechanism 
+New gas-refund mechanism
 
 - 0. No new gas-refund mechanisms are introduced.
 - 1. A new simple gas-refund mechanism is introduced that does not affect either existing tests or existing gas-refund mechanisms.
 - 2. A new complex gas-refund mechanism is introduced or a simple mechanism that affects existing tests or existing gas-refund mechanisms.
 - 3. A new complex gas-refund mechanism is introduced that affects existing tests or existing gas-refund mechanisms.
 
-#### Patterns affecting pre-existing tests
+##### Patterns affecting pre-existing tests
 
-Implements a new validation mechanism or rule that translates in reworking pre-existing tests 
+Implements a new validation mechanism or rule that translates in reworking pre-existing tests
 
 - 0. No pre-existing tests are affected by this change.
 - 1. Minor subset of existing tests are affected by this change.
 - 2. Considerable subset of existing tests are affected by this change but involves only a contrived category of tests.
 - 3. Major subset of existing tests are affected, including diverse category of tests (benchmarks, static, multiple forks, etc.).
 
-#### Transition-tool interface changes
+##### Transition-tool interface changes
 
-Modifies or adds new fields to the transition tool interface. 
+Modifies or adds new fields to the transition tool interface.
 
 - 0. No modifications to the transition tool interface are required.
-- 1. A single new field needs to be introduced to the transition tool interface. 
+- 1. A single new field needs to be introduced to the transition tool interface.
 - 2. Multiple new fields or a new mechanism has to be introduced to the transition tool interface.
 - 3. Multiple new fields and a new mechanism has to be introduced to the transition tool interface.
 
 *Special consideration must be paid to this section if the EIP introduces a mechanism that requires the state transition tool to be aware whether the block it is processing is the fork-activation block.
 
-#### Cryptography
+##### Cryptography
 
-Introduces new cryptography mechanisms or modifies existing functionality that involves cryptography 
+Introduces new cryptography mechanisms or modifies existing functionality that involves cryptography
 
 - 0. No cryptography mechanisms are introduced.
 - 1. A new cryptography mechanism is introduced but it is a well known mechanism that is known to have vast resources to aid on its testing.
 - 2. Multiple new cryptography mechanisms are introduced that are well-known or a single but novel mechanism is introduced that is either untested or has limited resources.
 - 3. Multiple new cryptography mechanisms are introduced and at least one of them is a novel mechanism.
 
-#### Edge/boundary conditions
+##### Edge/boundary conditions
 
 Feature contains edge/boundary conditions.
 
@@ -79,7 +78,7 @@ Feature contains edge/boundary conditions.
 - 2. Multiple edge-case or boundary-condition prone mechanisms are introduced, but none of them requires an elevated number of cases to test.
 - 3. Multiple edge-case or boundary-condition prone mechanisms are introduced and at least one of them requires an elevated number of cases to test.
 
-#### Block syncing changes
+##### Block syncing changes
 
 Modifies block RLP validation mechanisms that require test client syncing.
 
@@ -88,7 +87,7 @@ Modifies block RLP validation mechanisms that require test client syncing.
 - 2. Multiple simple RLP validation mechanisms are introduced or a single complex one.
 - 3. Multiple RLP validation mechanisms are introduced and at least one of them is deemed complex.
 
-#### Engine API changes
+##### Engine API changes
 
 Introduces new fields to the Engine API directives
 
@@ -97,25 +96,25 @@ Introduces new fields to the Engine API directives
 - 2. Multiple fields are introduced to one or multiple Engine API end points, or a new Engine API end-point is introduced.
 - 3. Multiple fields are introduced to one or multiple Engine API end points and a new Engine API end-point is introduced.
 
-#### Added system contracts
+##### Added system contracts
 
-Introduces new system contract, stateful or not 
+Introduces new system contract, stateful or not
 
 - 0. No new system contracts are introduced.
 - 1. A new system contract is introduced that is not stateful nor does it trigger a new system action (e.g. requests to the consensus layer).
 - 2. Multiple new system contracts are introduced or a single new system contract that is either stateful or triggers a new system action (e.g. requests to the consensus layer).
 - 3. Multiple new system contracts are introduced and at least one of them is either stateful or triggers a new system action (e.g. requests to the consensus layer).
 
-#### Modified system contracts
+##### Modified system contracts
 
-Modifies pre-existing system contracts 
+Modifies pre-existing system contracts
 
 - 0. No modifications to pre-existing system contracts are introduced.
 - 3. At least one pre-existing system contract is modified, which would involve irregular state transition or a similarly complex transition methodology.
 
-#### Added opcodes
+##### Added opcodes
 
-Introduces new opcodes 
+Introduces new opcodes
 
 - 0. No new opcodes are introduced.
 - 1. A new simple opcode is introduced (no data portion, no complex stack mechanics, and a constant gas cost).
@@ -124,16 +123,17 @@ Introduces new opcodes
 
 *Cryptography opcodes are not considered complex by default. Refer to the "Cryptography" section for a separate assessment.
 
-#### Modified opcodes
+##### Modified opcodes
 
-Modifies pre-existing opcodes 
+Modifies pre-existing opcodes
 
 - 0. No pre-existing opcode modifications are introduced.
+- 1. A pre-existing opcode is deprecated.
 - 3. At least one pre-existing opcode's behavior is modified (not including gas changes).
 
-#### Added precompiles
+##### Added precompiles
 
-Introduces new precompiles 
+Introduces new precompiles
 
 - 0. No new precompiles are introduced.
 - 1. A new simple precompile is introduced (constant input length, constant gas cost).
@@ -142,55 +142,55 @@ Introduces new precompiles
 
 *Cryptography precompiles are not considered complex by default. Refer to the "Cryptography" for a separate assessment.
 
-#### Modified precompiles
+##### Modified precompiles
 
-Modifies pre-existing precompiles logic or gas-accounting 
+Modifies pre-existing precompiles logic or gas-accounting
 
 - 0. No pre-existing precompiles are modified.
 - 1. At least one pre-existing precompile has its gas schedule modified.
 - 2. Multiple pre-existing precompiles have their gas schedule modified, or a single pre-existing precompile has its behavior modified.
-- 3. Multiple pre-existing precompiles have their behavior modified.
+- 3. The behavior of multiple pre-existing precompiles, or a single complex pre-existing precompileis modified.
 
-#### Encoding changes (RLP/SSZ)
+##### Encoding changes (RLP/SSZ)
 
-Introduces encoding changes at the transaction/block/interfaces level 
+Introduces encoding changes at the transaction/block/interfaces level
 
 - 0. No encoding changes are introduced at the transaction, block, or interfaces levels.
 - 3. An encoding change is introduced at transaction, block or interfaces level (e.g. RLP -> SSZ).
 
-#### New transaction types
+##### New transaction types
 
-Introduces a new transaction type 
+Introduces a new transaction type
 
 - 0. No new transaction types are introduced.
 - 3. A new transaction type is introduced.
 
-#### New or modified transaction validity mechanisms
+##### New or modified transaction validity mechanisms
 
-Creates new or modifies pre-existing transaction types' validation mechanisms 
+Creates new or modifies pre-existing transaction types' validation mechanisms
 
 - 0. No changes are introduced to the validity rules of existing transaction types or to their intrinsic gas cost calculation.
 - 1. Minor adjustments are introduced to validity rules or intrinsic gas cost calculation, but they do not significantly affect existing tests.
 - 2. Changes to validity rules or intrinsic gas cost calculation affect existing tests, but require only limited updates to test cases and no redesign of the testing infrastructure.
 - 3. Changes to validity rules or intrinsic gas cost calculation require extensive rework or redesign of the tests or testing infrastructure.
 
-#### New block / header fields
+##### New block / header fields
 
-Introduces new block or block header fields 
+Introduces new block or block header fields
 
 - 0. No new block or header fields are introduced.
 - 3. A new block or header field is introduced.
 
-#### New fork activation mechanism
+##### New fork activation mechanism
 
-Modifies state, internal variables, or similar, at the fork activation block 
+Modifies state, internal variables, or similar, at the fork activation block
 
 - 0. No state modifications, internal variables or similar are modified at the fork activation block.
 - 3. Either a state modification or internal variables are modified at the fork activation block.
 
 *Initialization of new internal variable is not considered a modification.
 
-#### Performance risks
+##### Performance risks
 
 Introduces or modifies mechanisms and requires performance validation.
 
@@ -199,7 +199,7 @@ Introduces or modifies mechanisms and requires performance validation.
 - 2. The introduced mechanisms cannot be fully benchmarked in isolation, but they only have a limited impact on the existing performance benchmarks.
 - 3. The introduced mechanisms cannot be benchmarked in isolation and have a substantial impact on existing performance benchmarks or have complex interactions with existing mechanisms.
 
-#### Security risks
+##### Security risks
 
 Introduces or modifies mechanisms that could compromise the security of the chain, users, validators, or other stakeholders, if not implemented properly.
 
@@ -208,7 +208,7 @@ Introduces or modifies mechanisms that could compromise the security of the chai
 - 2. The introduced mechanisms interact with a limited number of existing components, slightly altering their security assumptions and requiring a targeted security review or fuzzing.
 - 3. The introduced mechanisms interact with multiple existing components, including critical ones, substantially altering their security assumptions and requiring an extensive security review and fuzzing.
 
-#### Cross-EIP interactions
+##### Cross-EIP interactions
 
 Introduces or modifies mechanisms that affect other EIPs in either the same or past forks.
 
@@ -248,22 +248,22 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 **Total: X**
 
-### Special Considerations
+#### Special Considerations
 
 > Evaluator must write here special considerations that make the EIP particularly complex to test due to reasons not directly included in this checklist.
 
-### Notes
+#### Notes
 
-> Evaluator notes that do not affect the score but are valid points that must be taken into consideration when the tests are being written. 
+> Evaluator notes that do not affect the score but are valid points that must be taken into consideration when the tests are being written.
 
-### Final Assessment
+#### Final Assessment
 
 | Category | Description | Value |
 |-----------|--------------|:----:|
 | **Total Score** | Sum of all anchor scores (0–72) | **`XX`** |
 | **Complexity Tier** | Computed from total score | 🟢 / 🟡 / 🔴 |
 
-#### Tier Interpretation
+##### Tier Interpretation
 
 | Tier | Range | Meaning |
 |------|--------|----------|
@@ -272,10 +272,10 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 | 🔴 **High Complexity** | **>=20** | Broad or deep impact on protocol behavior; high regression risk; and/or requiring intensive cross-EIP testing. |
 
 
-# Consensus Specs
+## Consensus Specs
 
-## Specs
+### Specs
 
-## Testing
+### Testing
 
-## Notes
+### Notes
