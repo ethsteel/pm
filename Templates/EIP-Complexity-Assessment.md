@@ -128,8 +128,7 @@ Introduces new opcodes
 Modifies pre-existing opcodes
 
 - 0. No pre-existing opcode modifications are introduced.
-- 1. A pre-existing opcode is deprecated.
-- 3. At least one pre-existing opcode's behavior is modified (not including gas changes).
+- 3. At least one pre-existing opcode's behavior is modified (not including gas changes) or a pre-existing opcode is deprecated.
 
 ##### Added precompiles
 
@@ -149,7 +148,7 @@ Modifies pre-existing precompiles logic or gas-accounting
 - 0. No pre-existing precompiles are modified.
 - 1. At least one pre-existing precompile has its gas schedule modified.
 - 2. Multiple pre-existing precompiles have their gas schedule modified, or a single pre-existing precompile has its behavior modified.
-- 3. The behavior of multiple pre-existing precompiles, or a single complex pre-existing precompileis modified.
+- 3. The behavior of multiple pre-existing precompiles, or a single complex pre-existing precompile modified.
 
 ##### Encoding changes (RLP/SSZ)
 
