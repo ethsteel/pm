@@ -25,7 +25,7 @@ Remaining open tasks:
 
 ## Fusaka
 
-- Sync simulator has been fixed after being flaky in the past months through a series of PRs: [#2272](https://github.com/ethereum/execution-spec-tests/pull/2272), [#1670](https://github.com/ethereum/execution-specs/pull/1670)
+- Sync simulator has been fixed after being flaky in the past months through a series of PRs: [#2252](https://github.com/ethereum/execution-spec-tests/pull/2252), [#2272](https://github.com/ethereum/execution-spec-tests/pull/2272), [#1670](https://github.com/ethereum/execution-specs/pull/1670)
 
 ## Glamsterdam
 
