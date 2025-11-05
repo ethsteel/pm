@@ -109,8 +109,10 @@ Introduces new system contract, stateful or not
 
 Modifies pre-existing system contracts
 
-- 0. No modifications to pre-existing system contracts are introduced.
-- 3. At least one pre-existing system contract is modified, which would involve irregular state transition or a similarly complex transition methodology.
+- 0. No modifications to pre-existing system contracts are introduced, directly or indirectly.
+- 1. Does not directly modify any system contract, but its behavior has minor indirect effects on one or more system contracts.
+- 2. Does not directly modify any system contract, but its behavior has major indirect effects on one or more system contracts.
+- 3. At least one pre-existing system contract code or state is modified, which would involve irregular state transition or a similarly complex transition methodology.
 
 ##### Added opcodes
 
