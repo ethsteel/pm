@@ -27,6 +27,10 @@ TLDR:
 - ethereum/execution-specs#1752: Added Osaka mainnet configuration info to the specs, [@SamWilsn](https://github.com/SamWilsn).
 - ethereum/execution-specs#1789: Create blob parameter-only hardforks on the fly, [@SamWilsn](https://github.com/SamWilsn).
 
+### Releases
+
+- Final EELS release for Fusaka (RC until first Fusaka block is finalized on Mainnet): https://github.com/ethereum/execution-specs/releases/tag/v2.18.0rc6
+
 ## Glamsterdam
 
 ### Block-level Access Lists
