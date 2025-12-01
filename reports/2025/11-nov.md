@@ -7,6 +7,7 @@ TLDR:
 - 📊 1 Benchmarking release, [@LouisTsai-Csie](https://github.com/LouisTsai-Csie).
 - 🔥 Gas repricing efforts ramped up! [@LouisTsai-Csie](https://github.com/LouisTsai-Csie).
 - 🧩 Glamsterdam PFI'd EIP complexity evaluations: [ethsteel/pm#7](https://github.com/ethsteel/pm/issues/7).
+- 📐 Final Fusaka EELS Release Candidate [published on pypi](https://pypi.org/project/ethereum-execution/#history) - the final release will be published once the first Fusaka block is finalized on Mainnet, [@SamWilsn](https://github.com/SamWilsn).
 - 🛠️ Fusaka mainnet live on-chain testing preparations [@felix314159](https://github.com/felix314159), [@spencer-tb](https://github.com/spencer-tb).
 - 📝 2 blog posts:
   - 🏗️ _"The Weld is Complete"_ by [@gurukamath](https://github.com/gurukamath).
@@ -29,7 +30,7 @@ TLDR:
 
 ### Releases
 
-- Final EELS release for Fusaka (RC until first Fusaka block is finalized on Mainnet): https://github.com/ethereum/execution-specs/releases/tag/v2.18.0rc6
+- Final EELS release for Fusaka (RC until first Fusaka block is finalized on Mainnet): [v2.18.0rc6](https://github.com/ethereum/execution-specs/releases/tag/v2.18.0rc6), [pypi](https://pypi.org/project/ethereum-execution/#history), [@SamWilsn](https://github.com/SamWilsn).
 
 ## Glamsterdam
 
