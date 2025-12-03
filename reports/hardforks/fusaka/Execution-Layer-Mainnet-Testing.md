@@ -117,8 +117,8 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_ga
 
 #### Transaction Hashes
 
-`test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: [0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece](https://etherscan.io/tx/0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece)
-`test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected), accound funding[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6), acccount refund after no tx execution [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
+- `test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: [0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece](https://etherscan.io/tx/0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece)
+- `test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected): account funding[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6), acccount refund after no tx execution [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
 
 #### Outcome
 
@@ -168,11 +168,11 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_inc
 
 #### Transaction Hashes
 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base]`: [0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0](https://etherscan.io/tx/0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0)
-`test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base]`: [0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7](https://etherscan.io/tx/0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7)
-`test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp]`: [0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51](https://etherscan.io/tx/0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51)
-`test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001]`: [0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083](https://etherscan.io/tx/0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083)
-`test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes]`: [0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189](https://etherscan.io/tx/0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189)
+- `test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base]`: [0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0](https://etherscan.io/tx/0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0)
+- `test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base]`: [0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7](https://etherscan.io/tx/0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7)
+- `test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp]`: [0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51](https://etherscan.io/tx/0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51)
+- `test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001]`: [0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083](https://etherscan.io/tx/0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083)
+- `test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes]`: [0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189](https://etherscan.io/tx/0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189)
 
 
 #### Outcome
@@ -339,8 +339,8 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_
 
 #### Transaction Hashes
 
-`test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros]`: [0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437](https://etherscan.io/tx/0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437)
-`test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros]`: [0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0](https://etherscan.io/tx/0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0)
+- `test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros]`: [0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437](https://etherscan.io/tx/0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437)
+- `test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros]`: [0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0](https://etherscan.io/tx/0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0)
 
 #### Outcome
 
@@ -390,8 +390,8 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_pre
 
 #### Transaction Hashes
 
-`test_valid[fork_Osaka-state_test--valid_r1_sig-]`: [0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92](https://etherscan.io/tx/0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92)
-`test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-]`: [0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de](https://etherscan.io/tx/0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de)
+- `test_valid[fork_Osaka-state_test--valid_r1_sig-]`: [0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92](https://etherscan.io/tx/0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92)
+- `test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-]`: [0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de](https://etherscan.io/tx/0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de)
 
 #### Outcome
 
