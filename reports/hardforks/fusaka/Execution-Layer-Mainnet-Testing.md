@@ -48,8 +48,8 @@ Environment dependent, not testable via `execute` command.
 
 ## Schedule
 
-- Fork Epoch: 411392 (Dec-03-2025 09:49:11 PM)
-- Fork Expected Finalization Epoch: 411394 (Dec-03-2025 10:01:59 PM)
+- Fork Epoch: 411392 (Dec-03-2025 09:49:11 PM UTC)
+- Fork Expected Finalization Epoch: 411394 (Dec-03-2025 10:01:59 PM UTC)
 - Testing will commence at the fork finalization epoch when the chain finalizes successfully without intervention.
 
 ## Test Spec
