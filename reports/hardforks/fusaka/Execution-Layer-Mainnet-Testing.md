@@ -56,8 +56,7 @@ Environment dependent, not testable via `execute` command.
 
 #### EELS Commit
 
-<!-- Link to the commit used for testing -->
-https://github.com/ethereum/execution-specs/tree/forks/osaka/
+https://github.com/ethereum/execution-specs/commit/2b7dc12d89bc9daa45a0737ab36c14fe55eaad5b
 
 ### - EIP-7823: Set upper bounds for MODEXP
 
@@ -73,10 +72,9 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7823_modexp_upper_b
 
 #### Transaction Hashes
 
-<!-- Hashes of the transactions that executed the test logic, excluding account funding or contract creation. -->
-
-`tests/.../test_eip_mainnet.py::test_...`: [0x01234...cdef](https://etherscan.io/tx/0x01234...cdef)
-
+`test_modexp_boundary[fork_Osaka-state_test-base-boundary-1024-bytes]`: 
+`test_modexp_over_boundary[fork_Osaka-state_test-base-over-boundary-1025-bytes]`: 
+        
 #### Outcome
 
 ✅ PASS / ❌ FAIL
@@ -99,14 +97,13 @@ Send a transaction with the gas limit cap and above.
 #### Command
 
 ```
-uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
+uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
 ```
 
 #### Transaction Hashes
 
-<!-- Hashes of the transactions that executed the test logic, excluding account funding or contract creation. -->
-
-`tests/.../test_eip_mainnet.py::test_...`: [0x01234...cdef](https://etherscan.io/tx/0x01234...cdef)
+`test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: 
+`test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: 
 
 #### Outcome
 
@@ -125,21 +122,22 @@ uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_
 
 #### Description
 
-<!-- General description of the tests to be executed. -->
+Trigger the gas cost changes in the ModExp precompile.
 
 #### Command
 
-<!-- Command used to execute the tests. -->
-
 ```
-uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
+uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
 ```
 
 #### Transaction Hashes
 
-<!-- Hashes of the transactions that executed the test logic, excluding account funding or contract creation. -->
+`test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base]`: 
+`test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base]`: 
+`test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp]`: 
+`test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001]`: 
+`test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes]`: 
 
-`tests/.../test_eip_mainnet.py::test_...`: [0x01234...cdef](https://etherscan.io/tx/0x01234...cdef)
 
 #### Outcome
 
@@ -158,11 +156,9 @@ uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_
 
 #### Description
 
-<!-- General description of the tests to be executed. -->
+Run `execute eth-config` after the fork to validate remaining BPO forks.
 
 #### Command
-
-<!-- Command used to execute the tests. -->
 
 ```
 uv run execute eth-config ...
@@ -189,21 +185,20 @@ N/A
 
 #### Description
 
-<!-- General description of the tests to be executed. -->
+Execute the opcode with different inputs.
 
 #### Command
 
 <!-- Command used to execute the tests. -->
 
 ```
-uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
+uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
 ```
 
 #### Transaction Hashes
 
-<!-- Hashes of the transactions that executed the test logic, excluding account funding or contract creation. -->
-
-`tests/.../test_eip_mainnet.py::test_...`: [0x01234...cdef](https://etherscan.io/tx/0x01234...cdef)
+`test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros]`: 
+`test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros]`: 
 
 #### Outcome
 
@@ -222,21 +217,20 @@ uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_
 
 #### Description
 
-<!-- General description of the tests to be executed. -->
+Execute the precompile with different inputs.
 
 #### Command
 
 <!-- Command used to execute the tests. -->
 
 ```
-uv run execute remote --fork=Osaka -m mainnet tests/... --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
+uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_precompiles/test_eip_mainnet.py --rpc-seed-key $MAINNET_RPC_SEED_KEY --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id $MAINNET_CHAIN_ID
 ```
 
 #### Transaction Hashes
 
-<!-- Hashes of the transactions that executed the test logic, excluding account funding or contract creation. -->
-
-`tests/.../test_eip_mainnet.py::test_...`: [0x01234...cdef](https://etherscan.io/tx/0x01234...cdef)
+`test_valid[fork_Osaka-state_test--valid_r1_sig-]`: 
+`test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-]`: 
 
 #### Outcome
 
