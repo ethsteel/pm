@@ -118,7 +118,9 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_ga
 #### Transaction Hashes
 
 - `test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: [0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece](https://etherscan.io/tx/0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece)
-- `test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected): account funding[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6), acccount refund after no tx execution [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
+- `test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected):
+  - account funding:[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6)
+  - acccount refund after no tx execution: [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
 
 #### Outcome
 
