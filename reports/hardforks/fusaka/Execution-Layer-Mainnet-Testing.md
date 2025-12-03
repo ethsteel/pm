@@ -83,7 +83,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7823_modexp_upper_b
 ================================================================================================ test session starts =================================================================================================
 platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0
 Generating fixtures for: Osaka
-Start seed for EOA: 0x384b848c34a36cd05735668f429cfc5311aa53058a5c51467b14505bb15969d
+Start seed for EOA: *
 Log file: logs/execute-remote-20251203-220332-main.log
 rootdir: /home/marioevz/Development/Eth/execution-specs
 configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
@@ -131,7 +131,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_ga
 ================================================================================================ test session starts =================================================================================================
 platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
 Generating fixtures for: Osaka
-Start seed for EOA: 0xb4ae073b73d321e92255a8b83fa8ffe18ffc65d4dc01fd066f89cc9af3bfa05e
+Start seed for EOA: *
 cachedir: .pytest_cache
 Log file: logs/execute-remote-20251203-220718-main.log
 metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
@@ -185,7 +185,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_inc
 ================================================================================================ test session starts =================================================================================================
 platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
 Generating fixtures for: Osaka
-Start seed for EOA: 0xe56456f2bd2b240023047d69255f77a5323f97ba36520172051b3b4faa6aaa3a
+Start seed for EOA: *
 cachedir: .pytest_cache
 Log file: logs/execute-remote-20251203-221125-main.log
 metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
@@ -352,7 +352,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_
 ================================================================================================ test session starts =================================================================================================
 platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
 Generating fixtures for: Osaka
-Start seed for EOA: 0xb455ab3f3dfcc6979e5d38b44798a23efb59966d457747dbbfe5c98885ef5f39
+Start seed for EOA: *
 cachedir: .pytest_cache
 Log file: logs/execute-remote-20251203-221638-main.log
 metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
@@ -404,7 +404,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_pre
 ================================================================================================ test session starts =================================================================================================
 platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
 Generating fixtures for: Osaka
-Start seed for EOA: 0xecf3a0a57edc9824fec2f3edc6eb91700dbf87b2e0a6f6ac39766859d818621c
+Start seed for EOA: *
 cachedir: .pytest_cache
 Log file: logs/execute-remote-20251203-221945-main.log
 metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_precompiles/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
