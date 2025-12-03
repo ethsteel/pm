@@ -3,7 +3,7 @@
 ## Summary
 
 - Test transactions will be sent to mainnet for each EIP using [EELS's `execute remote` command](https://eest.ethereum.org/main/running_tests/execute/remote/), with the exception of the EIPs in the next bullet point.
-- Approximately ~[EXECUTE DRY-RUN ETH] Eth gas required for these tests.
+- Approximately ~0.0001 Eth gas required for these tests.
 
 ## EIPs
 
