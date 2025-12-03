@@ -161,7 +161,7 @@ Run `execute eth-config` after the fork to validate remaining BPO forks.
 #### Command
 
 ```
-uv run execute eth-config ...
+uv run execute eth-config --network Mainnet --rpc-endpoint $MAINNET_RPC_ENDPOINT --chain-id=1
 ```
 
 #### Transaction Hashes
@@ -170,16 +170,100 @@ N/A
 
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
-<!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
+================================================= test session starts ==================================================
+platform darwin -- Python 3.13.2, pytest-8.4.2, pluggy-1.6.0
+collected 7 items
+
+test_eth_config_current[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+test_eth_config_current_fork_id[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+test_eth_config_next[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+test_eth_config_next_fork_id[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+test_eth_config_last[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+test_eth_config_last_fork_id[rpc.srv1.snapshotter.mainnet.ethpandaops.io] .
+
+============================================= 6 passed in 1.33s =============================================
 ```
 
-<!-- Details if necessary. -->
+Tested against 5 mainnet RPC endpoints for Geth, Reth, Nethermind, Erigon, and Besu. All returned consistent results.
+
+#### eth_config Response
+
+```json
+{
+  "current": {
+    "activationTime": 1764798551,
+    "blobSchedule": {
+      "baseFeeUpdateFraction": 5007716,
+      "max": 9,
+      "target": 6
+    },
+    "chainId": "0x1",
+    "forkId": "0x5167e2a6",
+    "precompiles": {
+      "BLAKE2F": "0x0000000000000000000000000000000000000009",
+      "BLS12_G1ADD": "0x000000000000000000000000000000000000000b",
+      "BLS12_G1MSM": "0x000000000000000000000000000000000000000c",
+      "BLS12_G2ADD": "0x000000000000000000000000000000000000000d",
+      "BLS12_G2MSM": "0x000000000000000000000000000000000000000e",
+      "BLS12_MAP_FP2_TO_G2": "0x0000000000000000000000000000000000000011",
+      "BLS12_MAP_FP_TO_G1": "0x0000000000000000000000000000000000000010",
+      "BLS12_PAIRING_CHECK": "0x000000000000000000000000000000000000000f",
+      "BN254_ADD": "0x0000000000000000000000000000000000000006",
+      "BN254_MUL": "0x0000000000000000000000000000000000000007",
+      "BN254_PAIRING": "0x0000000000000000000000000000000000000008",
+      "ECREC": "0x0000000000000000000000000000000000000001",
+      "ID": "0x0000000000000000000000000000000000000004",
+      "KZG_POINT_EVALUATION": "0x000000000000000000000000000000000000000a",
+      "MODEXP": "0x0000000000000000000000000000000000000005",
+      "P256VERIFY": "0x0000000000000000000000000000000000000100",
+      "RIPEMD160": "0x0000000000000000000000000000000000000003",
+      "SHA256": "0x0000000000000000000000000000000000000002"
+    },
+    "systemContracts": {
+      "BEACON_ROOTS_ADDRESS": "0x000f3df6d732807ef1319fb7b8bb8522d0beac02",
+      "CONSOLIDATION_REQUEST_PREDEPLOY_ADDRESS": "0x0000bbddc7ce488642fb579f8b00f3a590007251",
+      "DEPOSIT_CONTRACT_ADDRESS": "0x00000000219ab540356cbb839cbe05303d7705fa",
+      "HISTORY_STORAGE_ADDRESS": "0x0000f90827f1c53a10cb7a02335b175320002935",
+      "WITHDRAWAL_REQUEST_PREDEPLOY_ADDRESS": "0x00000961ef480eb55e80d19ad83579a64c007002"
+    }
+  },
+  "next": {
+    "activationTime": 1765290071,
+    "blobSchedule": {
+      "baseFeeUpdateFraction": 8346193,
+      "max": 15,
+      "target": 10
+    },
+    "chainId": "0x1",
+    "forkId": "0xcba2a1c0",
+    "precompiles": { "..." },
+    "systemContracts": { "..." }
+  },
+  "last": {
+    "activationTime": 1767747671,
+    "blobSchedule": {
+      "baseFeeUpdateFraction": 11684671,
+      "max": 21,
+      "target": 14
+    },
+    "chainId": "0x1",
+    "forkId": "0x07c9462e",
+    "precompiles": { "..." },
+    "systemContracts": { "..." }
+  }
+}
+```
+
+The response shows the next scheduled BPO (Blob Parameter Only) forks, and that Osaka is the current fork:
+
+- **current**: The active Osaka fork with blob target=6, max=9
+- **next**: First BPO fork (BPO1) increasing blob parameters to target=10, max=15
+- **last**: Final scheduled BPO fork (BPO2) with target=14, max=21
+
+All clients return consistent configurations, confirming correct `eth_config` implementation.
 
 ### - EIP-7939: Count leading zeros (CLZ) opcode
 
