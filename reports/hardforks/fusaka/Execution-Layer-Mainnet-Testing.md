@@ -72,8 +72,8 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7823_modexp_upper_b
 
 #### Transaction Hashes
 
-`test_modexp_boundary[fork_Osaka-state_test-base-boundary-1024-bytes]`: [0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1](https://etherscan.io/tx/0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1)
-`test_modexp_over_boundary[fork_Osaka-state_test-base-over-boundary-1025-bytes]`: [0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f](https://etherscan.io/tx/0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f)
+- `test_modexp_boundary[fork_Osaka-state_test-base-boundary-1024-bytes]`: [0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1](https://etherscan.io/tx/0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1)
+- `test_modexp_over_boundary[fork_Osaka-state_test-base-over-boundary-1025-bytes]`: [0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f](https://etherscan.io/tx/0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f)
         
 #### Outcome
 
