@@ -224,7 +224,7 @@ uv run execute eth-config --network Mainnet --rpc-endpoint $MAINNET_RPC_ENDPOINT
 
 #### Transaction Hashes
 
-N/A
+This is a regular call to a node's JSON RPC to request information; it does not require sending a transaction. 
 
 #### Outcome
 
