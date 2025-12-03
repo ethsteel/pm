@@ -72,21 +72,36 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7823_modexp_upper_b
 
 #### Transaction Hashes
 
-`test_modexp_boundary[fork_Osaka-state_test-base-boundary-1024-bytes]`: 
-`test_modexp_over_boundary[fork_Osaka-state_test-base-over-boundary-1025-bytes]`: 
+`test_modexp_boundary[fork_Osaka-state_test-base-boundary-1024-bytes]`: [0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1](https://etherscan.io/tx/0x5be8356abea4466ad03a1821d34b437b0b45e1b38c03b09cc545ddb36a0548b1)
+`test_modexp_over_boundary[fork_Osaka-state_test-base-over-boundary-1025-bytes]`: [0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f](https://etherscan.io/tx/0x1eaf26a250f50411888a11d227dbdfeecb51a273613cac9a9fa097b64b102b0f)
         
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
-<!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
-```
+================================================================================================ test session starts =================================================================================================
+platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0
+Generating fixtures for: Osaka
+Start seed for EOA: 0x384b848c34a36cd05735668f429cfc5311aa53058a5c51467b14505bb15969d
+Log file: logs/execute-remote-20251203-220332-main.log
+rootdir: /home/marioevz/Development/Eth/execution-specs
+configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
+plugins: regex-0.2.0, custom-report-1.0.1, cov-4.1.0, metadata-3.1.1, xdist-3.8.0, html-4.1.1, json-report-1.5.0
+collecting ...  pytest-regex selected 2 tests to run for regex: .*
+collected 2 items
 
-<!-- Details if necessary. -->
+tests/osaka/eip7823_modexp_upper_bounds/test_eip_mainnet.py ..                                                                                                                                                  [2/2]
+
+================================================================================================== warnings summary ==================================================================================================
+.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812
+  /home/marioevz/Development/Eth/execution-specs/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; execution_testing.cli.pytest_commands.plugins.shared.execute_fill
+    self.import_plugin(arg, consider_entry_points=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------------------------------------------- Log file: /home/marioevz/Development/Eth/execution-specs/logs/execute-remote-20251203-220332-main.log --------------------------------------------------------
+====================================================================================== 2 passed, 1 warning in 165.43s (0:02:45) ======================================================================================
+```
 
 ### - EIP-7825: Transaction Gas Limit Cap
 
@@ -102,18 +117,39 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_ga
 
 #### Transaction Hashes
 
-`test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: 
-`test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: 
+`test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: [0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece](https://etherscan.io/tx/0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece)
+`test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected), accound funding[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6), acccount refund after no tx execution [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
 
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
 <!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
+================================================================================================ test session starts =================================================================================================
+platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
+Generating fixtures for: Osaka
+Start seed for EOA: 0xb4ae073b73d321e92255a8b83fa8ffe18ffc65d4dc01fd066f89cc9af3bfa05e
+cachedir: .pytest_cache
+Log file: logs/execute-remote-20251203-220718-main.log
+metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
+rootdir: /home/marioevz/Development/Eth/execution-specs
+configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
+plugins: regex-0.2.0, custom-report-1.0.1, cov-4.1.0, metadata-3.1.1, xdist-3.8.0, html-4.1.1, json-report-1.5.0
+collecting ...  pytest-regex selected 2 tests to run for regex: .*
+collected 2 items
+
+tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py::test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test] PASSED                                                                               [1/2]
+tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py::test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test] PASSED                                                                                 [2/2]
+
+================================================================================================== warnings summary ==================================================================================================
+.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812
+  /home/marioevz/Development/Eth/execution-specs/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; execution_testing.cli.pytest_commands.plugins.shared.execute_fill
+    self.import_plugin(arg, consider_entry_points=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------------------------------------------- Log file: /home/marioevz/Development/Eth/execution-specs/logs/execute-remote-20251203-220718-main.log --------------------------------------------------------
+====================================================================================== 2 passed, 1 warning in 72.24s (0:01:12) =======================================================================================
 ```
 
 <!-- Details if necessary. -->
@@ -132,25 +168,47 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_inc
 
 #### Transaction Hashes
 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base]`: 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base]`: 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp]`: 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001]`: 
-`test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes]`: 
+`test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base]`: [0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0](https://etherscan.io/tx/0x26d0f8b580d735ac74755030f8e4a52ed02814888887e64097c81c7d0f6dd2e0)
+`test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base]`: [0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7](https://etherscan.io/tx/0x71470510279c1006e84fc65c3977983ecdf9658a3aaca0f0e98b90914333e4e7)
+`test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp]`: [0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51](https://etherscan.io/tx/0xca67e591a6f4d4f995ede0927c13e3713d9393660ff9b710fec548bbe6863a51)
+`test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001]`: [0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083](https://etherscan.io/tx/0x10d904c6c5d7f3e1f1f527b8871176faac26f4ebc92bdf4a767799fa0e446083)
+`test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes]`: [0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189](https://etherscan.io/tx/0xf2ae6f732cea8ff243d394790c68150118de7a13edcb3c839a848d1043e63189)
 
 
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
-<!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
+================================================================================================ test session starts =================================================================================================
+platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
+Generating fixtures for: Osaka
+Start seed for EOA: 0xe56456f2bd2b240023047d69255f77a5323f97ba36520172051b3b4faa6aaa3a
+cachedir: .pytest_cache
+Log file: logs/execute-remote-20251203-221125-main.log
+metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
+rootdir: /home/marioevz/Development/Eth/execution-specs
+configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
+plugins: regex-0.2.0, custom-report-1.0.1, cov-4.1.0, metadata-3.1.1, xdist-3.8.0, html-4.1.1, json-report-1.5.0
+collecting ...  pytest-regex selected 5 tests to run for regex: .*
+collected 5 items
+
+tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_different_base_lengths[fork_Osaka-state_test-32-bytes-long-base] PASSED                                                                [1/5]
+tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_different_base_lengths[fork_Osaka-state_test-33-bytes-long-base] PASSED                                                                [2/5]
+tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_different_base_lengths[fork_Osaka-state_test-1024-bytes-long-exp] PASSED                                                               [3/5]
+tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_different_base_lengths[fork_Osaka-state_test-nagydani-1-pow0x10001] PASSED                                                             [4/5]
+tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_different_base_lengths[fork_Osaka-state_test-zero-exponent-64bytes] PASSED                                                             [5/5]
+
+================================================================================================== warnings summary ==================================================================================================
+.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812
+  /home/marioevz/Development/Eth/execution-specs/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; execution_testing.cli.pytest_commands.plugins.shared.execute_fill
+    self.import_plugin(arg, consider_entry_points=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------------------------------------------- Log file: /home/marioevz/Development/Eth/execution-specs/logs/execute-remote-20251203-221125-main.log --------------------------------------------------------
+====================================================================================== 5 passed, 1 warning in 242.22s (0:04:02) ======================================================================================
 ```
 
-<!-- Details if necessary. -->
 
 ### - EIP-7910: eth_config JSON-RPC Method
 
@@ -281,21 +339,40 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_
 
 #### Transaction Hashes
 
-`test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros]`: 
-`test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros]`: 
+`test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros]`: [0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437](https://etherscan.io/tx/0x9ec7c2d94378ce3eaa9c794ce70d2f6f0288918d008bc8de79f167a008cb6437)
+`test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros]`: [0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0](https://etherscan.io/tx/0x7f9ea62cf3490a0080523c056fb0327ee3de2d9a854e297b8fe86442d5126bb0)
 
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
-<!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
+================================================================================================ test session starts =================================================================================================
+platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
+Generating fixtures for: Osaka
+Start seed for EOA: 0xb455ab3f3dfcc6979e5d38b44798a23efb59966d457747dbbfe5c98885ef5f39
+cachedir: .pytest_cache
+Log file: logs/execute-remote-20251203-221638-main.log
+metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
+rootdir: /home/marioevz/Development/Eth/execution-specs
+configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
+plugins: regex-0.2.0, custom-report-1.0.1, cov-4.1.0, metadata-3.1.1, xdist-3.8.0, html-4.1.1, json-report-1.5.0
+collecting ...  pytest-regex selected 2 tests to run for regex: .*
+collected 2 items
+
+tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py::test_clz_mainnet[fork_Osaka-state_test-clz-8-leading-zeros] PASSED                                                                                 [1/2]
+tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py::test_clz_mainnet[fork_Osaka-state_test-clz-all-zeros] PASSED                                                                                       [2/2]
+
+================================================================================================== warnings summary ==================================================================================================
+.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812
+  /home/marioevz/Development/Eth/execution-specs/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; execution_testing.cli.pytest_commands.plugins.shared.execute_fill
+    self.import_plugin(arg, consider_entry_points=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------------------------------------------- Log file: /home/marioevz/Development/Eth/execution-specs/logs/execute-remote-20251203-221638-main.log --------------------------------------------------------
+====================================================================================== 2 passed, 1 warning in 145.33s (0:02:25) ======================================================================================
 ```
 
-<!-- Details if necessary. -->
 
 ### - EIP-7951: Precompile for secp256r1 Curve Support
 
@@ -313,18 +390,39 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_pre
 
 #### Transaction Hashes
 
-`test_valid[fork_Osaka-state_test--valid_r1_sig-]`: 
-`test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-]`: 
+`test_valid[fork_Osaka-state_test--valid_r1_sig-]`: [0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92](https://etherscan.io/tx/0x6911ce5860e375b70c35a5b7d4860a85481e2c4e3db057196cd8089dc7434b92)
+`test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-]`: [0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de](https://etherscan.io/tx/0x63e3c33f556f13df928c994cbe97e0cb7f5994912fc1c355d128027461d005de)
 
 #### Outcome
 
-✅ PASS / ❌ FAIL
+✅ PASS
 
 <!-- Summary of the command output. -->
 ```
-================================================================= test session starts ==================================================================
-...
-============================================================ X passed in Xs (X:XX:XX) =============================================================
+================================================================================================ test session starts =================================================================================================
+platform linux -- Python 3.11.2, pytest-8.4.2, pluggy-1.6.0 -- /home/marioevz/Development/Eth/execution-specs/.venv/bin/python3
+Generating fixtures for: Osaka
+Start seed for EOA: 0xecf3a0a57edc9824fec2f3edc6eb91700dbf87b2e0a6f6ac39766859d818621c
+cachedir: .pytest_cache
+Log file: logs/execute-remote-20251203-221945-main.log
+metadata: {'Python': '3.11.2', 'Platform': 'Linux-6.1.0-41-cloud-amd64-x86_64-with-glibc2.36', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'regex': '0.2.0', 'custom-report': '1.0.1', 'cov': '4.1.0', 'metadata': '3.1.1', 'xdist': '3.8.0', 'html': '4.1.1', 'json-report': '1.5.0'}, 'Command-line args': '<code>execute -c /home/marioevz/Development/Eth/execution-specs/packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini --rootdir . --fork=Osaka -m mainnet tests/osaka/eip7951_p256verify_precompiles/test_eip_mainnet.py --rpc-seed-key ** --rpc-endpoint ** --chain-id 1 -vv</code>', 'Senders': {}}
+rootdir: /home/marioevz/Development/Eth/execution-specs
+configfile: packages/testing/src/execution_testing/cli/pytest_commands/pytest_ini_files/pytest-execute.ini
+plugins: regex-0.2.0, custom-report-1.0.1, cov-4.1.0, metadata-3.1.1, xdist-3.8.0, html-4.1.1, json-report-1.5.0
+collecting ...  pytest-regex selected 2 tests to run for regex: .*
+collected 2 items
+
+tests/osaka/eip7951_p256verify_precompiles/test_eip_mainnet.py::test_valid[fork_Osaka-state_test--valid_r1_sig-] PASSED                                                                                         [1/2]
+tests/osaka/eip7951_p256verify_precompiles/test_eip_mainnet.py::test_invalid[fork_Osaka-state_test--invalid_r1_sig_but_valid_k1_sig-] PASSED                                                                    [2/2]
+
+================================================================================================== warnings summary ==================================================================================================
+.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812
+  /home/marioevz/Development/Eth/execution-specs/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:812: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; execution_testing.cli.pytest_commands.plugins.shared.execute_fill
+    self.import_plugin(arg, consider_entry_points=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------------------------------------------- Log file: /home/marioevz/Development/Eth/execution-specs/logs/execute-remote-20251203-221945-main.log --------------------------------------------------------
+====================================================================================== 2 passed, 1 warning in 91.81s (0:01:31) =======================================================================================
 ```
 
 <!-- Details if necessary. -->
