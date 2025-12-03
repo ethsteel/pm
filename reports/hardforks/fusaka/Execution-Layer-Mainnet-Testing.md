@@ -9,22 +9,22 @@
 
 ### Included
 
-- EIP-7823: Set upper bounds for MODEXP
-- EIP-7825: Transaction Gas Limit Cap
-- EIP-7883: ModExp Gas Cost Increase
-- EIP-7910: eth_config JSON-RPC Method
-- EIP-7939: Count leading zeros (CLZ) opcode
-- EIP-7951: Precompile for secp256r1 Curve Support
+- [EIP-7823: Set upper bounds for MODEXP](https://eips.ethereum.org/EIPS/eip-7823)
+- [EIP-7825: Transaction Gas Limit Cap](https://eips.ethereum.org/EIPS/eip-7825)
+- [EIP-7883: ModExp Gas Cost Increase](https://eips.ethereum.org/EIPS/eip-7883)
+- [EIP-7910: eth_config JSON-RPC Method](https://eips.ethereum.org/EIPS/eip-7910)
+- [EIP-7939: Count leading zeros (CLZ) opcode](https://eips.ethereum.org/EIPS/eip-7939)
+- [EIP-7951: Precompile for secp256r1 Curve Support](https://eips.ethereum.org/EIPS/eip-7951)
 
 ### Excluded
 
-- EIP-7594: PeerDAS (Networking related, not testable via EL transactions).
-- EIP-7642: eth/69 (Networking related, not testable via EL transactions).
-- EIP-7892: Blob Parameter Only ('BPO') Hardforks (Requires many blob transactions included in the same block, not easily achievable via `execute` command).
-- EIP-7917: Deterministic proposer lookahead (CL only change).
-- EIP-7918: Blob base fee bounded by execution cost (Environment dependent, not testable via `execute` command).
-- EIP-7934: RLP Execution Block Size Limit (Environment dependent, not testable via `execute` command).
-- EIP-7935: Set default gas limit to 60M (Environment dependent, not testable via `execute` command).
+- [EIP-7594: PeerDAS](https://eips.ethereum.org/EIPS/eip-7594) (Networking related, not testable via EL transactions).
+- [EIP-7642: eth/69](https://eips.ethereum.org/EIPS/eip-7642) (Networking related, not testable via EL transactions).
+- [EIP-7892: Blob Parameter Only ('BPO') Hardforks](https://eips.ethereum.org/EIPS/eip-7892) (Requires many blob transactions included in the same block, not easily achievable via `execute` command).
+- [EIP-7917: Deterministic proposer lookahead](https://eips.ethereum.org/EIPS/eip-7917) (CL only change).
+- [EIP-7918: Blob base fee bounded by execution cost](https://eips.ethereum.org/EIPS/eip-7918) (Environment dependent, not testable via `execute` command).
+- [EIP-7934: RLP Execution Block Size Limit](https://eips.ethereum.org/EIPS/eip-7934) (Environment dependent, not testable via `execute` command).
+- [EIP-7935: Set default gas limit to 60M](https://eips.ethereum.org/EIPS/eip-7935) (Environment dependent, not testable via `execute` command).
 
 ## Schedule
 
@@ -38,7 +38,7 @@
 
 https://github.com/ethereum/execution-specs/commit/2b7dc12d89bc9daa45a0737ab36c14fe55eaad5b
 
-### - EIP-7823: Set upper bounds for MODEXP
+### - [EIP-7823: Set upper bounds for MODEXP](https://eips.ethereum.org/EIPS/eip-7823)
 
 #### Description
 
@@ -83,7 +83,7 @@ tests/osaka/eip7823_modexp_upper_bounds/test_eip_mainnet.py ..                  
 ====================================================================================== 2 passed, 1 warning in 165.43s (0:02:45) ======================================================================================
 ```
 
-### - EIP-7825: Transaction Gas Limit Cap
+### - [EIP-7825: Transaction Gas Limit Cap](https://eips.ethereum.org/EIPS/eip-7825)
 
 #### Description
 
@@ -136,7 +136,7 @@ tests/osaka/eip7825_transaction_gas_limit_cap/test_eip_mainnet.py::test_tx_gas_l
 
 <!-- Details if necessary. -->
 
-### - EIP-7883: ModExp Gas Cost Increase
+### - [EIP-7883: ModExp Gas Cost Increase](https://eips.ethereum.org/EIPS/eip-7883)
 
 #### Description
 
@@ -192,7 +192,7 @@ tests/osaka/eip7883_modexp_gas_increase/test_eip_mainnet.py::test_modexp_differe
 ```
 
 
-### - EIP-7910: eth_config JSON-RPC Method
+### - [EIP-7910: eth_config JSON-RPC Method](https://eips.ethereum.org/EIPS/eip-7910)
 
 #### Description
 
@@ -305,7 +305,7 @@ The response shows the next scheduled BPO (Blob Parameter Only) forks, and that 
 
 All clients return consistent configurations, confirming correct `eth_config` implementation.
 
-### - EIP-7939: Count leading zeros (CLZ) opcode
+### - [EIP-7939: Count leading zeros (CLZ) opcode](https://eips.ethereum.org/EIPS/eip-7939)
 
 #### Description
 
@@ -356,7 +356,7 @@ tests/osaka/eip7939_count_leading_zeros/test_eip_mainnet.py::test_clz_mainnet[fo
 ```
 
 
-### - EIP-7951: Precompile for secp256r1 Curve Support
+### - [EIP-7951: Precompile for secp256r1 Curve Support](https://eips.ethereum.org/EIPS/eip-7951)
 
 #### Description
 
