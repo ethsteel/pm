@@ -3,7 +3,7 @@
 ## Summary
 
 - Test transactions will be sent to mainnet for each EIP using [EELS's `execute remote` command](https://eest.ethereum.org/main/running_tests/execute/remote/), with the exception of the EIPs in the next bullet point.
-- Approximately ~0.0001 Eth gas required for these tests.
+- Approximately ~0.0001 ETH gas required for these tests.
 
 ## EIPs
 
@@ -18,38 +18,18 @@
 
 ### Excluded
 
-- EIP-7594: PeerDAS
-
-Networking related, not testable via EL transactions.
-
-- EIP-7642: eth/69
-
-Networking related, not testable via EL transactions.
-
-- EIP-7892: Blob Parameter Only ('BPO') Hardforks
-
-Requires many blob transactions included in the same block, not easily achievable via `execute` command.
-
-- EIP-7917: Deterministic proposer lookahead
-
-CL only change.
-
-- EIP-7918: Blob base fee bounded by execution cost
-
-Environment dependent, not testable via `execute` command.
-
-- EIP-7934: RLP Execution Block Size Limit
-
-Environment dependent, not testable via `execute` command.
-
-- EIP-7935: Set default gas limit to 60M
-
-Environment dependent, not testable via `execute` command.
+- EIP-7594: PeerDAS (Networking related, not testable via EL transactions).
+- EIP-7642: eth/69 (Networking related, not testable via EL transactions).
+- EIP-7892: Blob Parameter Only ('BPO') Hardforks (Requires many blob transactions included in the same block, not easily achievable via `execute` command).
+- EIP-7917: Deterministic proposer lookahead (CL only change).
+- EIP-7918: Blob base fee bounded by execution cost (Environment dependent, not testable via `execute` command).
+- EIP-7934: RLP Execution Block Size Limit (Environment dependent, not testable via `execute` command).
+- EIP-7935: Set default gas limit to 60M (Environment dependent, not testable via `execute` command).
 
 ## Schedule
 
-- Fork Epoch: 411392 (Dec-03-2025 09:49:11 PM UTC)
-- Fork Expected Finalization Epoch: 411394 (Dec-03-2025 10:01:59 PM UTC)
+- Fork Epoch: 411392 (Dec-03-2025 09:49:11 PM UTC).
+- Fork Expected Finalization Epoch: 411394 (Dec-03-2025 10:01:59 PM UTC).
 - Testing will commence at the fork finalization epoch when the chain finalizes successfully without intervention.
 
 ## Test Spec
@@ -119,7 +99,7 @@ uv run execute remote --fork=Osaka -m mainnet tests/osaka/eip7825_transaction_ga
 
 - `test_tx_gas_limit_cap_at_maximum[fork_Osaka-state_test]`: [0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece](https://etherscan.io/tx/0x952750833f1dab54ea088dc936f37c6064c0fb3678985d4351f17cca9b0c5ece)
 - `test_tx_gas_limit_cap_exceeded[fork_Osaka-state_test]`: No direct transaction executed (expected):
-  - account funding:[0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6)
+  - account funding: [0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6](https://etherscan.io/tx/0xc5ac11315053776ac903235ef71f97deabe4ae9d5a4bd18b645e97699ecec2f6)
   - acccount refund after no tx execution: [0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b](https://etherscan.io/tx/0x46d32a995a7934d268bc264c7a6e1c15308a73a07cc7c12e50a9ed21a383941b)
 
 #### Outcome
