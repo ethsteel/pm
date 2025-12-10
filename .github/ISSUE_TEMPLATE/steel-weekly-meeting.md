@@ -8,9 +8,7 @@ assignees: ''
 
 ### Rapid-fire Status Updates
 
-Every team member gives a 60 second TLDR on their current work, highlighting any blockers:
-- [Wheel of Steel](https://wheelofnames.com/axb-4cz).
-- [60s timer](https://www.bigtimer.net/?minutes=1&repeat=false).
+Every team member gives a 60 second TLDR on their current work, highlighting any blockers, chosen by the [Wheel of Steel](https://wheelofdeath.rip/?id=WcLWOPBC).
 
 Anything that can't be resolved within 60s should be scheduled for discussion later in the call.
 
