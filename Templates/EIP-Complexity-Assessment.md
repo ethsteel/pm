@@ -20,7 +20,7 @@ New EVM gas accounting rules
 - 0. No gas accounting changes.
 - 1. Existing gas accounting mechanism is updated but it does not affect existing tests.
 - 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
-- 3. A new gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
+- 3. A gas accounting mechanism is introduced/modified and affects existing mechanisms which in turn affect existing tests.
 
 ##### Blob gas accounting changes
 
