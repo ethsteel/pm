@@ -18,9 +18,9 @@ All anchors are scored on a 0–3 scale. A score of 4 may be used in exceptional
 
 New EVM gas accounting rules
 - 0. No gas accounting changes.
-- 1. Existing gas accounting mechanism is updated.
+- 1. Existing gas accounting mechanism is updated but it does not affect existing tests.
 - 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
-- 3. A new gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
+- 3. A gas accounting mechanism is introduced/modified and affects existing tests.
 
 ##### Blob gas accounting changes
 
