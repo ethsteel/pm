@@ -82,4 +82,23 @@ Major CI infrastructure improvements: benchmark workflows, hive-consume rate lim
 
 ## Comms & Community
 
-- Contributed to EIPs/ERCs process improvements.
+### Ethereum Improvement Proposals
+
+- Significant progress in catching up on ERC/EIP reviews. Notably:
+  - [https://eips.ethereum.org/EIPS/eip-7943](ERC-7943: uRWA - Universal Real World Asset Interface) to Last Call
+  - [https://eips.ethereum.org/EIPS/eip-7994](ERC-7994: Purpose-Bound ERC-20 with Conditional Unlock) to Final
+- More progress on the new version of the EIPs/ERCs website ([preview](https://eips-wg.github.io/EIPs/)]
+  - Minor XSS vulnerability in search fixed (thanks ChatGPT for the responsible disclosure!)
+  - Fixed symlink directory traversal attack vector
+  - Subsection links are parsed correctly
+  - [First stab at a migration guide](https://github.com/eips-wg/preprocessor/blob/master/MIGRATION.md)
+- Creating a new role to get more eyes on pull requests: <https://github.com/ethcatherders/EIPIP/issues/398>
+- Created a [Housekeeping Ideas](https://github.com/ethereum/EIPs/issues/11195) issue to hopefully direct airdrop farmers into more useful pull requests
+- Added @jochem-brouwer as an Editor
+
+### AllWalletDevs
+
+- Productive-ish meeting covering:
+  - [ERC-8092: Associated Accounts](https://eips.ethereum.org/EIPS/eip-8092) by Coinbase
+  - [ERC-8117: Compress Address Format](https://eips.ethereum.org/EIPS/eip-8117) & Pretty Safe - Vanity Address Mining
+
