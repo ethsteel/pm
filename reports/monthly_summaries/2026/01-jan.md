@@ -9,6 +9,7 @@
 - Added spec implementations and test coverage for the EIPs scoped for [bal-devnet-2](https://notes.ethereum.org/@ethpandaops/bal-devnet-2): [EIP-7778](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7778.md), [EIP-7708](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7708.md), [EIP-7843](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7843.md) and [EIP-8024](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-8024.md).
 - Released 5 test vector updates for client teams; as of [bal@v4.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v4.0.0) these target the full [bal-devnet-2](https://notes.ethereum.org/@ethpandaops/bal-devnet-2) spec.
 - Client support: STEEL contributed a [SELFDESTRUCT OOG fix for Nethermind](https://github.com/NethermindEth/nethermind/pull/10064) and the [Amsterdam instruction set to Geth](https://github.com/ethereum/go-ethereum/pull/33643) to facilitate testing.
+- EIPs/ERCs: Catching up on reviews & progress on website redesign.
 
 ### Scale the L1
 
