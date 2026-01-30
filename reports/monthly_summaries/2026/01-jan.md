@@ -7,7 +7,7 @@
 - Completed EIP complexity assignments to help evaluate EIP CFI status.
 - The BAL dev branch ([`eips/amsterdam/eip-7928`](https://github.com/ethereum/execution-specs/commits/eips/amsterdam/eip-7928/)) was [merged into the main `forks/amsterdam` branch](https://github.com/ethereum/execution-specs/pull/1719); specs and tests continue to be refined and extended.
 - Added spec implementations and test coverage for the EIPs scoped for [bal-devnet-2](https://notes.ethereum.org/@ethpandaops/bal-devnet-2): [EIP-7778](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7778.md), [EIP-7708](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7708.md), [EIP-7843](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7843.md) and [EIP-8024](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-8024.md).
-- Released 5 test vector updates for client teams; as of [bal@v4.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v4.0.0) these target the full [bal-devnet-2](https://notes.ethereum.org/@ethpandaops/bal-devnet-2) spec.
+- Released 5 test vector updates for client teams; as of [bal@v5.1.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v5.1.0) these target the full [bal-devnet-2](https://notes.ethereum.org/@ethpandaops/bal-devnet-2) spec.
 - Client support: STEEL contributed a [SELFDESTRUCT OOG fix for Nethermind](https://github.com/NethermindEth/nethermind/pull/10064) and the [Amsterdam instruction set to Geth](https://github.com/ethereum/go-ethereum/pull/33643) to facilitate testing.
 - EIPs/ERCs: Catching up on reviews & progress on website redesign.
 
@@ -52,7 +52,7 @@ Additionally:
 
 ### Test Vector Releases
 
-Continued BAL devnet and bal-devnet-2 releases ([bal@v2.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v2.0.0), [bal@v3.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v3.0.0), [bal@v3.0.1](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v3.0.1), [bal@v4.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v4.0.0), [bal@v5.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v5.0.0)):
+Continued BAL devnet and bal-devnet-2 releases ([bal@v2.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v2.0.0), [bal@v3.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v3.0.0), [bal@v3.0.1](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v3.0.1), [bal@v4.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v4.0.0), [bal@v5.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v5.0.0)), [bal@v5.1.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v5.1.0):
 
 - [bal@v4.0.0](https://github.com/ethereum/execution-spec-tests/releases/tag/bal%40v4.0.0) (and newer) target the evolving bal-devnet-2 spec that includes EIP-7928, EIP-7708, EIP-7778, EIP-7843, EIP-8024.
 - Releases will be continuously deployed as specs are updated and test coverage increases.
