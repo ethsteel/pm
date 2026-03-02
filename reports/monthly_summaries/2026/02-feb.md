@@ -59,6 +59,7 @@ Felix shipped the getBlobsV3 PR (reviewed by Dan).
 - Felipe developed BALS-specific benchmark tests covering pre-fetching and parallel execution scenarios, building on Jochem's (Prototyping) [initial PR](https://github.com/jochem-brouwer/execution-specs/pull/1) and iterating with ~20 review comments.
 - A spec ambiguity was discovered in EIP-7928's security consideration: the check that rejects blocks when access list elements exceed a gas-derived threshold is unclear about "gas remaining" semantics. Empty blocks with system contract items trigger the exception at low gas limits. Three tests fail for early-implementing clients. Decision: defer to `bals-devnet-4`. Guru assigned to drive resolution with Toni (Prototyping, spec author).
 - Guru flagged that EIP-2780 worsens worst-case BALS by reducing account access cost. Toni is investigating.
+- Sam refactored and simplified the BALs implementation.
 
 **[`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) EIPs**
 
@@ -125,3 +126,4 @@ The team shipped several improvements with measurable impact on developer veloci
 - **PR review load-tracking script (Mario)**: Shows backlog of open PRs assigned to each team member for better review distribution.
 - **Auto-merge on approval (Spencer)**: PR reviewed by Sam that enables auto-merge when approved and all CI passes.
 - **EVM bytes improvement (Mario)**: Merged improvement to make EVM bytes more readable when porting static tests.
+- **Reliable EELS Sync (Sam)**: Retry sync on server-side errors.
