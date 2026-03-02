@@ -66,7 +66,7 @@ Felix shipped the getBlobsV3 PR (reviewed by Dan).
 - **EIP-7976** (Floor Call Data Cost): Felix implemented with Toni's spec assistance. Toni wrote his own spec PR and was always available for questions. CI failures from hardcoded gas values in shared tests identified and fixed.
 - **EIP-7981** (Excess List Cost Increase): Felix implemented; merged to EIP branch. Same hardcoded gas test issue as 7976 surfaced and addressed.
 - **EIP-7954** (Contract Size Increase): Rahul (raxhvl, Prototyping) volunteered and implemented. A simple constants change where most tests auto-update via fork inheritance. Felipe reviewed and merged.
-- **EIP-8024** (Encoding/Decoding Rules): Felix assessed as doable quickly. Picked up after 7981 merge, with Dan assigned as reviewer.
+- **EIP-8024** (Encoding/Decoding Rules): Felix assessed as doable quickly. Picked up after 7981 merge, with Felipe assigned as reviewer.
 - **EIP-8038** (State Access Gas): Reassigned from Spencer/Felipe to Dan after Spencer became overloaded with 8037 and Felipe went on PTO. Dan starting implementation in early March.
 - **EIP-7904** (Gas Cost Renaming): Carson's work here fed directly into the repricing tool (see Gas Repricing below). A new tool to list mappings between gas constants, opcodes, and forks was also added.
 
