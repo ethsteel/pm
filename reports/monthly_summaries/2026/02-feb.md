@@ -5,7 +5,7 @@
 ### Glamsterdam
 
 - Substantial implementation progress on 6 new Amsterdam EIPs this month, with EIP-8024 wrapping up from January and EIP-8038 queued for March. EIP-8037 (state gas reservoir) emerged as the most disruptive change, breaking most legacy tests and requiring a framework design overhaul for gas limit handling.
-- [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipped Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0) after scope expanded beyond initial estimates. Includes EIP-7954 and EIP-8037, which uses a `cost_per_state_byte` of 1174 for devnet-3. ~700 static tests temporarily skipped as the YAML-to-Python port is required to add 8037 logic; these will land in devnet-4.
+- [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipped Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0) after scope expanded beyond initial estimates. Includes EIP-7954 and EIP-8037, which uses a `cost_per_state_byte` of 1174 for devnet-3. ~700 static tests temporarily skipped as the YAML-to-Python port is required to add 8037 logic; these will land in devnet-4.
 - Benchmark filling is transitioning from evmone to Geth since evmone does not support Amsterdam. Spencer's opcode-count tracer PR merged into Geth, unblocking Amsterdam benchmark generation. Migration is still in progress.
 
 ### Scale the L1
@@ -23,9 +23,9 @@
 ### Priorities for Next Month
 
 - Follow-up releases for [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) as needed.
-- Begin `bals-devnet-4` preparation: Restore full static test coverage via the YAML-to-Python port, resolve BALS security check (EIP-7928), and integrate EIP-2780.
-- Assist delivery of repricing benchmark data for state access EIPs using redesigned cold/warm methodology. Implement the internal repricing tool for rapid gas cost iteration.
-- Build and fill BALS-specific benchmark tests to measure client optimization impact under block-level access lists.
+- Begin `bal-devnet-4` preparation: Restore full static test coverage via the YAML-to-Python port, resolve BAL security check (EIP-7928), and integrate EIP-2780.
+- Assist delivery of repricing benchmark data for state access EIPs using redesigned cold/warm methodology. Implement the [internal repricing tool](https://github.com/ethereum/execution-specs/pull/2331) for rapid gas cost iteration.
+- Build and fill BAL-specific benchmark tests to measure client optimization impact under block-level access lists.
 
 ---
 
@@ -33,7 +33,7 @@
 
 ### Specs and Tests
 
-February was dominated by Amsterdam EIP implementation and the push toward [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3). EIP-8037 consumed the most effort due to its fundamental change to gas accounting. By month's end, all EIP branches except 8037 were rebased and in good shape, with the [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipping Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0).
+February was dominated by Amsterdam EIP implementation and the push toward [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3). EIP-8037 consumed the most effort due to its fundamental change to gas accounting. By month's end, all EIP branches except 8037 were rebased and in good shape, with the [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipping Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0).
 
 Felix shipped the getBlobsV3 PR (reviewed by Dan).
 
@@ -54,14 +54,14 @@ Felix shipped the getBlobsV3 PR (reviewed by Dan).
 
 - EIP-8038 — State Access Gas (Dan).
 
-**BALS (Headliner)**
+**Block-Level Access Lists (Headliner)**
 
-- Felipe developed BALS-specific benchmark tests covering pre-fetching and parallel execution scenarios, building on Jochem's (Prototyping) [initial PR](https://github.com/jochem-brouwer/execution-specs/pull/1) and iterating with ~20 review comments.
-- A spec ambiguity was discovered in EIP-7928's security consideration: the check that rejects blocks when access list elements exceed a gas-derived threshold is unclear about "gas remaining" semantics. Empty blocks with system contract items trigger the exception at low gas limits. Three tests fail for early-implementing clients. Decision: defer to `bals-devnet-4`. Guru assigned to drive resolution with Toni (Prototyping, spec author).
+- Felipe developed BAL-specific benchmark tests covering pre-fetching and parallel execution scenarios, building on Jochem's (Prototyping) [initial PR](https://github.com/jochem-brouwer/execution-specs/pull/1) and iterating with ~20 review comments.
+- A spec ambiguity was discovered in EIP-7928's security consideration: the check that rejects blocks when access list elements exceed a gas-derived threshold is unclear about "gas remaining" semantics. Empty blocks with system contract items trigger the exception at low gas limits. Three tests fail for early-implementing clients. Guru assigned to drive resolution with Toni (Prototyping, spec author).
 - Guru flagged that EIP-2780 worsens worst-case BALS by reducing account access cost. Toni is investigating.
 - Sam refactored and simplified the BALs implementation.
 
-**[`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) EIPs**
+**[`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) EIPs**
 
 - **EIP-8037** (State Gas Reservoir): Spencer led implementation. This EIP splits transaction gas into compute and state paths with a reservoir mechanism, breaking most Frontier-through-Shanghai tests due to insufficient hardcoded gas limits. Spencer addressed Sam Wilson's 27-comment review, added state gas tracing, and built a script to auto-convert ~700 YAML static tests to Python (hasher-verified). A sub-call bug was found where reservoir gas returns zero. Raised at ACDT to flag the testing burden. Non-static tests resolved; static tests temporarily skipped for the devnet-3 release.
 - **EIP-7976** (Floor Call Data Cost): Felix implemented with Toni's spec assistance. Toni wrote his own spec PR and was always available for questions. CI failures from hardcoded gas values in shared tests identified and fixed.
@@ -73,11 +73,11 @@ Felix shipped the getBlobsV3 PR (reviewed by Dan).
 
 **Postponed until devnet-4**
 
-- **EIP-2780** (Variable Intrinsic Gas): Guru led with draft PR, basic tests, and legacy test fixes. Open spec questions about EIP-7702 and EIP-7928 interactions drove a clarification PR on the EIPs repo. Confirmed not required for [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) but will be ready for `bals-devnet-4`.
+- **EIP-2780** (Variable Intrinsic Gas): Guru led with draft PR, basic tests, and legacy test fixes. Open spec questions about EIP-7702 and EIP-7928 interactions drove a clarification PR on the EIPs repo. Confirmed not required for [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) but will be ready for `bal-devnet-4`.
 
 ### Gas Repricing
 
-Six repricing EIPs were targeted for February per Maria's (Robust Incentives Group) timeline. Four have open PRs (some merged), but EIP-8038 and EIP-7904 specs are still incomplete. The end-of-February deadline was acknowledged as impossible given [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) demands and has shifted to end of March, which now also includes block-level access list optimizations.
+Six repricing EIPs were targeted for February per Maria's (Robust Incentives Group) timeline. Four have open PRs (some merged), but EIP-8038 and EIP-7904 specs are still incomplete. The end-of-February deadline was acknowledged as impossible given [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) demands and has shifted to end of March, which now also includes block-level access list optimizations.
 
 - Louis led coordination with the gaslighting committee through weekly calls. He completed refactoring all benchmark tests (stateful and compute) to use the bytecode gas calculator, a prerequisite for automated repricing.
 - Spencer migrated existing benchmark tests to Mario's automatic bytecode gas cost calculator, using an LLM for refactoring and verifying correctness with the hasher tool.
@@ -95,7 +95,7 @@ Six repricing EIPs were targeted for February per Maria's (Robust Incentives Gro
 #### Test Vectors
 
 - **Osaka benchmark release**: Published after resolving OOM issues that had blocked the build.
-- [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipped Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0) with ~700 static tests temporarily skipped pending the YAML-to-Python port (devnet-4). New EIPs included: EIP-7954 ([PR](https://github.com/ethereum/execution-specs/pull/2276)) and EIP-8037 ([PR](https://github.com/ethereum/execution-specs/pull/2363), [EIP change](https://github.com/ethereum/EIPs/pull/11328)).
+- [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) [test release shipped Feb 28](https://github.com/ethereum/execution-spec-tests/releases/tag/bal@v5.2.0) with ~700 static tests temporarily skipped pending the YAML-to-Python port (devnet-4). New EIPs included: EIP-7954 ([PR](https://github.com/ethereum/execution-specs/pull/2276)) and EIP-8037 ([PR](https://github.com/ethereum/execution-specs/pull/2363), [EIP change](https://github.com/ethereum/EIPs/pull/11328)).
 
 **Fixture directory layout change** ([PR](https://github.com/ethereum/execution-specs/pull/2134)): Future execution-spec-tests fixture releases will follow a new directory layout (fixture formats themselves are unchanged). Previously, fixture JSON files accumulated test cases for every target fork in a single file, growing with each new fork. Fixtures are now split into per-fork sub-directories, keeping file sizes bounded and letting runners target exactly the fork they need. See the [ACDT announcement](https://github.com/ethereum/pm/issues/1948#issuecomment-3971527094) for details.
 
@@ -106,7 +106,7 @@ The benchmarking efforts made significant infrastructure progress this month. Th
 - **Benchmark release stabilization**: The fill process had been failing ~300 tests before completion due to worker starvation on heavy parameterized tests. Felipe reduced max workers from 48 to 30 and added duration tracking. Dan discovered work-steal mode was not enabled and tested it successfully. Fill time dropped from a full day to ~3 hours.
 - **Artifact size reduction**: One benchmark test file was 2 GB (down from 15 GB). Culprits identified: entire post-allocation and full transaction receipts were included unnecessarily. Both removed for benchmark tests. Dmytro (Nethermind) flagged that 31 GB of total artifacts came from essentially two tests, which Mario resolved in [ethereum/execution-specs#2226](https://github.com/ethereum/execution-specs/pull/2226) with feedback from Jochem.
 - **Fixture directory restructuring**: Fixtures are now split into per-fork sub-directories, with benchmark fixtures additionally organized by gas limit and opcode count. See Releases section above ([PR](https://github.com/ethereum/execution-specs/pull/2134)).
-- **Amsterdam benchmark filling**: Since evmone does not support Amsterdam, the team is migrating to Geth for benchmark filling. Spencer's opcode-count tracer PR merged into Geth. Felipe rebased onto Geth's BALS `bals-devnet-2` branch and added T8N serialization for the BALS format. This migration is still in progress.
+- **Amsterdam benchmark filling**: Since evmone does not support Amsterdam, the team is migrating to Geth for benchmark filling. Spencer's opcode-count tracer PR merged into Geth. Felipe rebased onto Geth's BALS `bal-devnet-2` branch and added T8N serialization for the BALS format. This migration is still in progress.
 - **Benchmarker infrastructure (Rafael, PandaOps)**: S3 bucket publishing for results, API authentication, and scheduled CI runs deployed. CRIU-based process checkpointing implemented for cache-free test isolation: takes a memory snapshot after client startup, restores for each test with ~1 second overhead. Tested on perfnet-2 and mainnet snapshots for all clients.
 - **Stateful testing**: Mario wrote specs for a new stateful testing tool using `testing_buildBlock` against live clients.
 - **Repricing benchmark pipeline (Kamil, Nethermind)**: Test generation now fully automated on CI. Benchmarks run 24/7 across four test sets (two networks, two test types), ~3 runs per day. Database restructured into separate tables per test type and network. ZFS support replacing OverlayFS to address disk space issues.
