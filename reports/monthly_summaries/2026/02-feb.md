@@ -22,7 +22,7 @@
 
 ### Priorities for Next Month
 
-- Follow-up releases for [`bals-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) as needed.
+- Follow-up releases for [`bal-devnet-3`](https://notes.ethereum.org/@ethpandaops/bal-devnet-3) as needed.
 - Begin `bal-devnet-4` preparation: Restore full static test coverage via the YAML-to-Python port, resolve BAL security check (EIP-7928), and integrate EIP-2780.
 - Assist delivery of repricing benchmark data for state access EIPs using redesigned cold/warm methodology. Implement the [internal repricing tool](https://github.com/ethereum/execution-specs/pull/2331) for rapid gas cost iteration.
 - Build and fill BAL-specific benchmark tests to measure client optimization impact under block-level access lists.
