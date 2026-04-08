@@ -14,4 +14,6 @@ Anything that can't be resolved within 60s should be scheduled for discussion la
 
 ### Agenda Points
 
-TBD - please add comments to this issue for discussion in the meeting.
+- Glamsterdam
+- Hegota
+- Benchmarking
