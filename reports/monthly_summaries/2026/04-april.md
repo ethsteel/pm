@@ -35,8 +35,8 @@
 ### Priorities for Next Month
 
 - Finalize the EIP-8037 EELS spec and tests ready for a bal-devnet-7 release.
-- Stand up the new N+1 (Hegota) call (Fridays 14:00 UTC, Peter and Spencer leading) and define the process so red-complexity EIPs get earlier STEEL involvement.
-- Run the per-EIP branching-strategy retrospective and rotate the release lead off Spencer (Felipe or Felix likely next).
+- Push to SFI all `bal-devnet-6` EIPs and merge their respective `eips/amsterdam/eip-*` branch to `forks/amsterdam`.
+- Stand up the new N+1 (Hegota) call (Fridays 14:00 UTC, Peter leading) and define the process so red-complexity EIPs get earlier STEEL involvement.
 
 ---
 
@@ -44,7 +44,7 @@
 
 ### Specs and Tests
 
-April was dominated by EIP-8037 spec convergence. The team iterated through three different state-gas accounting models across the month and ultimately landed on inline op-code-level accounting at Soldogn, with final numbers locked. Four bal-devnets shipped between April 1 and April 30, capped by `bal-devnet-6` stabilizing the simpler final form just as the interop wrapped.
+April was dominated by EIP-8037 spec convergence. The team iterated through three different state-gas accounting models across the month and ultimately landed on inline op-code-level accounting at Soldogn. Four bal-devnets shipped between April 1 and April 30, capped by `bal-devnet-6` stabilizing the final form just as the interop wrapped.
 
 **BALS (Headliner)**
 
@@ -89,7 +89,7 @@ Ten test vector releases shipped this month, all driven by snobal devnet prepara
 
 ## Road to Soldogn (Svalbard) Interop
 
-Seven STEEL members participated in Soldøgn and the preceding STEEL co-work week in Oslo. Six joined core devs in Svalbard from April 27 to May 1, 2026 (Mario, Spencer, Felipe, Louis, Carson, Dan); Peter joined the pre-interop co-work week in Oslo (April 20 to 24), where his deep dive on EIP-8037 produced the alternative state-gas-accounting proposal that seeded the Monday emergency breakout on the trip. Felix, Sam, Keri, Guru, and Leo participated remotely throughout interop week via two-timezone standups. The team brought four headline goals into the trip: convergence on the EIP-8037 spec, EL hardening alignment with major client teams, EIP-7708 scope clarification, and gas repricing alignment for EIP-7904 and EIP-8038. April was structured deliberately around making those goals reachable.
+Seven STEEL members participated in Soldøgn and the preceding STEEL co-work week in Oslo. Six joined core devs in Svalbard from April 27 to May 1, 2026 (Mario, Spencer, Felipe, Louis, Carson, Dan); Peter joined the pre-interop co-work week in Oslo (April 20 to 24), where his deep dive on EIP-8037 produced the alternative state-gas-accounting proposal that seeded the Monday emergency breakout on the trip. Felix, Sam, Keri, Guru, and Leo participated remotely. The team brought four headline goals into the trip: convergence on the EIP-8037 spec, EL hardening alignment with major client teams, EIP-7708 scope clarification, and gas repricing alignment for EIP-7904 and EIP-8038. April was structured deliberately around making those goals reachable.
 
 ### Preparation timeline
 
