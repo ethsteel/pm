@@ -5,32 +5,32 @@
 ### Soldøgn Interop
 
 - **7 STEEL members participated in Soldøgn and the preceding STEEL Team co-work week in Oslo**. Mario, Spencer, Felipe, Louis, Carson, Dan joined core devs in Svalbard (Apr 27 to May 1), while Peter joined the pre-interop co-work week in Oslo (Apr 20 to 24). Peter's Oslo deep dive on EIP-8037 produced an alternative state-gas-accounting proposal that seeded the Monday 8037 breakout on the trip.
-- **Rapid iterations on EIP-8037 specs during daily working sessions ([pt1](https://notes.ethereum.org/@protocolsupport/8037-spec-breakout), [pt2](https://hackmd.io/@nixorokish/8037p2-summary), [pt3](https://hackmd.io/@nixorokish/8037p3-summary))** with Maria (RIG) and other core developers, notably Dragan (Reth), Ben Adams (Nethermind), Pawel (Erigon) and Marius (Geth), Spencer, Felipe and Mario could help converge the EIP-8037 State Gas spec, arriving at a fixed cost-per-state-byte and, after prototyping end-of-call accounting, decided that in-opcode accounting remained the best approach.
-- **Repricing Goals Achieved**: Louis collaborated intensively with Maria (RIG), Jochem (Prototyping), Raffael (EthPandaOps) and client teams to ensure that repricing benchmarking data could be gathered. This result in a conservative estimate of a 200M gas limit for Glamsterdam!
+- **Rapid iterations on EIP-8037 specs**. During daily working sessions ([pt1](https://notes.ethereum.org/@protocolsupport/8037-spec-breakout), [pt2](https://hackmd.io/@nixorokish/8037p2-summary), [pt3](https://hackmd.io/@nixorokish/8037p3-summary)) **Spencer, Felipe and Mario** worked intensively with Maria (RIG) and other core developers, notably Dragan (Reth), Ben Adams (Nethermind), Pawel (Erigon) and Marius (Geth) to converge the EIP-8037 State Gas spec, arriving at a fixed cost-per-state-byte and, after prototyping end-of-call accounting, decided that in-opcode accounting remained the best approach.
+- **Repricing Goals Achieved**: **Louis** collaborated intensively with Maria (RIG), Jochem (Prototyping), Raffael (EthPandaOps) and client teams to ensure that repricing benchmarking data could be gathered. This result in a conservative estimate of a 200M gas limit for Glamsterdam!
 - **Carson led an [EIP-7708 breakout session](https://hackmd.io/@nixorokish/eip7708-summary)** which further clarified spec (priority fees, base-fee burn, withdrawals out of scope).
-- **STEEL-led [EL Client breakout session](https://hackmd.io/@nixorokish/EL-hardening-summary).** Following up from in-person discussions with client teams, Dan led an EL-focussed testing session. Teams agreed that moving the primary testing methodology from a system test (Hive) to a module test (Spencer's recently proposed `enginetest` interface) could accelerate developement. Other topics included how to better handle EL exceptions and invalid tests and branching strategies.
+- **STEEL-led [EL Client breakout session](https://hackmd.io/@nixorokish/EL-hardening-summary).** Following up from in-person discussions with client teams, **Dan** led an EL-focussed testing session. Teams agreed that moving the primary testing methodology from a system test (Hive) to a module test (Spencer's recently proposed `enginetest` interface) could accelerate developement. Other topics included how to better handle EL exceptions and invalid tests and branching strategies.
 - On 3 of 5 days STEEL members won one of the daily Panda Prizes!
 - Louis made his first snowman with help from rest of the team.
 
 ### Glamsterdam
 
-- Leading up to the Interop, Spencer, Keri and other team members specs and added ~200 tests to allow direct launch of  bal-devnet-5 pre-interop.
+- Leading up to the Interop, Spencer, Keri and other team members added ~200 tests to allow direct launch of  bal-devnet-5 pre-interop.
 - Shipped 10 test vector releases including `bal@v6.0.0` (snobal-devnet-4) and the rapid-iteration `snobal-devnet-5`/`snobal-devnet-6` series during the final five days of the month at the Soldogn Interop.
 - Adopted Mario's `fork.is_eip_enabled(EIP)` cross-EIP testing pattern team-wide and merged Felix's Python DevNet merger script for conflict-free composition of EIPs 7976, 7981, 8024, and 8037.
 
-### Bogota
-
-- FOCIL: Felix added a new simulator to test the new `engine_getInclusionListV1` endpoint and remotely helped Besu test their implementation remotely during the interop.
-
-### Client Support
-
-- Spencer drafted an `enginetest` direct interface to all mainnet clients. Nethermind used this interface during the interop to accelerate testing, successfully detecting regressions. Additional commitments from Geth, Besu, Reth, Nimbus, Ethrex and Erigon to adopt the interface at the Soldogn EL hardening breakout (see [HackMD summary](https://hackmd.io/@nixorokish/EL-hardening-summary)).
-
-### Scale the L1
+### Benchmarking
 
 - Validated the cached/non-cached benchmarking methodology, which surfaced P256 verify as needing repricing (over-optimistic caching previously hid this).
 - Presented the first preliminary EIP-7904 and EIP-8038 worst-case multipliers at the April 21 gaslighting call (storage write 50x, account write 32x, storage access 86x flagged as suspicious by Besu).
 - Felipe's Geth T8N streaming fix cut peak memory on benchmark fills from ~12 GB to 2 to 3 GB, unlocking the benchmark release path.
+
+### Bogota
+
+- FOCIL: Felix added the first set of FOCIL tests in [PR #2643] and a new simulator to test the new `engine_getInclusionListV1` endpoint and remotely helped Besu test their implementation remotely during the interop.
+
+### Client Support
+
+- Spencer drafted an `enginetest` direct interface to all mainnet clients. Nethermind used this interface during the interop to accelerate testing, successfully detecting regressions. Additional commitments from Geth, Besu, Reth, Nimbus, Ethrex and Erigon to adopt the interface at the Soldogn EL hardening breakout (see [HackMD summary](https://hackmd.io/@nixorokish/EL-hardening-summary)).
 
 ### Priorities for Next Month
 
@@ -54,23 +54,14 @@ April was dominated by EIP-8037 spec convergence. The team iterated through thre
 
 **DevNet 4 / DevNet 5 / DevNet 6 EIPs**
 
-- **EIP-8037** (State Gas Reservoir): Spencer drove the "second headliner" EIP all month, contributing 17 execution-specs PRs two EIP updates ([EIPs #11532](https://github.com/ethereum/EIPs/pull/11532), [EIPs #11548](https://github.com/ethereum/EIPs/pull/11548)). Major test additions covered blockchain header gas used cases ([PR #2611](https://github.com/ethereum/execution-specs/pull/2611)), CREATE state gas charge ordering ([PR #2608](https://github.com/ethereum/execution-specs/pull/2608)), nested child frame refunds (Felipe, [PR #2733](https://github.com/ethereum/execution-specs/pull/2733)), per-dimension block gas limit checks (Keri, [PR #2703](https://github.com/ethereum/execution-specs/pull/2703)), CALL with value to selfdestructed accounts (Keri, [PR #2646](https://github.com/ethereum/execution-specs/pull/2646)), zero execution state gas on top-level failure (Keri, [PR #2689](https://github.com/ethereum/execution-specs/pull/2689)), CREATE failure refunds ([PR #2704](https://github.com/ethereum/execution-specs/pull/2704)), SELFDESTRUCT same-tx refunds ([PR #2707](https://github.com/ethereum/execution-specs/pull/2707)), immutable intrinsic state gas for EIP-7702 ([PR #2711](https://github.com/ethereum/execution-specs/pull/2711)), calldata floor on sender refund ([PR #2728](https://github.com/ethereum/execution-specs/pull/2728)), SSTORE refund clamp ([PR #2729](https://github.com/ethereum/execution-specs/pull/2729)), and alignment with the GasCosts refactor ([PR #2737](https://github.com/ethereum/execution-specs/pull/2737)). Roughly 200 unique tests added; 19 PRs in bal-devnet-4 alone.
+- **EIP-8037** (State Gas Reservoir): Spencer drove the "second unofficial headliner" EIP all month, contributing 17 execution-specs PRs two EIP updates ([EIPs #11532](https://github.com/ethereum/EIPs/pull/11532), [EIPs #11548](https://github.com/ethereum/EIPs/pull/11548)). Major test additions covered blockchain header gas used cases ([PR #2611](https://github.com/ethereum/execution-specs/pull/2611)), CREATE state gas charge ordering ([PR #2608](https://github.com/ethereum/execution-specs/pull/2608)), nested child frame refunds (Felipe, [PR #2733](https://github.com/ethereum/execution-specs/pull/2733)), per-dimension block gas limit checks (Keri, [PR #2703](https://github.com/ethereum/execution-specs/pull/2703)), CALL with value to selfdestructed accounts (Keri, [PR #2646](https://github.com/ethereum/execution-specs/pull/2646)), zero execution state gas on top-level failure (Keri, [PR #2689](https://github.com/ethereum/execution-specs/pull/2689)), CREATE failure refunds ([PR #2704](https://github.com/ethereum/execution-specs/pull/2704)), SELFDESTRUCT same-tx refunds ([PR #2707](https://github.com/ethereum/execution-specs/pull/2707)), immutable intrinsic state gas for EIP-7702 ([PR #2711](https://github.com/ethereum/execution-specs/pull/2711)), calldata floor on sender refund ([PR #2728](https://github.com/ethereum/execution-specs/pull/2728)), SSTORE refund clamp ([PR #2729](https://github.com/ethereum/execution-specs/pull/2729)), and alignment with the GasCosts refactor ([PR #2737](https://github.com/ethereum/execution-specs/pull/2737)). Roughly 200 unique tests added; 19 PRs in bal-devnet-4 alone.
 - **EIP-7976** (Floor Call Data Cost): Champion-side rebase on latest 47 (Mario) shipped in bal-devnet-4.
 - **EIP-7981** (Excess List Cost Increase): Felix improved test robustness in [PR #2696](https://github.com/ethereum/execution-specs/pull/2696); shipped in bal-devnet-4.
 - **EIP-7708** (logs for ETH transfers): Spencer added finalization burn log ordering and the coinbase fee no-log case in [PR #2717](https://github.com/ethereum/execution-specs/pull/2717). Carson and Peter Miller worked on an alternate gas-accounting proposal; Pawel returned with a new approach. Soldogn working session (May 1, Carson hosted) clarified scope: priority fees, base fee burn, and withdrawals are out of scope, and log cost is provisionally bundled with CALL repricing pending EIP-2780 clarity.
 - **EIP-2780** (Variable Intrinsic Gas): Guru landed the implementation in [PR #2175](https://github.com/ethereum/execution-specs/pull/2175) plus an EIPs clarification ([EIPs #11332](https://github.com/ethereum/EIPs/pull/11332)). Treated as nice-to-have for interop; static-test port remains a follow-up.
 - **EIP-8024** (Encoding/Decoding Rules): Mario fixed cross-EIP failures with EIP-8037 in [PR #2656](https://github.com/ethereum/execution-specs/pull/2656).
-- **FOCIL** (Bogota / next-fork prep): Felix added FOCIL src features and the first set of FOCIL tests in [PR #2643](https://github.com/ethereum/execution-specs/pull/2643), and built a new simulator for the `engine_getInclusionListV1` endpoint.
 - Felipe extended Geth's `testing_buildBlockV1` to wire up `slotnum` ([go-ethereum #34721](https://github.com/ethereum/go-ethereum/pull/34721)) and respect slot num when specified in payload attributes ([go-ethereum #34722](https://github.com/ethereum/go-ethereum/pull/34722))
 - **EIPS class refactor**: Mario added EIP classes ([PR #2571](https://github.com/ethereum/execution-specs/pull/2571)) and enabled multiple EIPs to be specified in `fork.is_eip_enabled` ([PR #2676](https://github.com/ethereum/execution-specs/pull/2676)). The latter became the team's standard cross-EIP testing pattern.
-
-**Future Fork Development Pipelining**
-
-- N+1 (Hegota) coordination call established at Soldogn (Fridays 14:00-15:00 UTC). Peter accepted leadership of the EELS side, with potentially Keri leading the testing side, and the first agenda item is to define the N+1 process itself so red-complexity EIPs get earlier attention.
-
-**EIP Complexity Assessments**
-
-- Retrospective on EIP-8037 surfaced a structural lesson: it was scored high-complexity in December but did not get STEEL's full attention until February. A two-month gap between scoring and engagement is exactly what the new N+1 process aims to close.
 
 ### Gas Repricing
 
@@ -155,14 +146,25 @@ A coordinated push moved the team's spec and tooling docs onto a single, current
 - **Dan led the STEEL [EL Client breakout session](https://hackmd.io/@nixorokish/EL-hardening-summary) (Apr 30)** following up from in-person discussions with client teams. Teams agreed to move the primary testing methodology from a system test (Hive) to a module test (Spencer's recently proposed `enginetest` interface) to accelerate development. Other topics: better handling of EL exceptions, invalid tests, and per-EIP branching strategies. Nethermind put `enginetest` to use during the interop and successfully detected regressions.
 - **Hands-on client work**: Felipe and Guillaume (Geth) merged the T8N data-streaming PR ([go-ethereum #34785](https://github.com/ethereum/go-ethereum/pull/34785)) on-site; Felipe and Guillaume also fixed the long-broken Erigon T8N for Amsterdam plus EVM tracing. Felix remotely helped a Besu engineer integrate FOCIL, after which Besu passes all FOCIL tests except 4 (limited only by the EIP-8037 fixture toggle).
 - **Lighter notes**: STEEL members took home daily Panda Prizes on three of five days. Louis built his first snowman with help from the rest of the team.
-- **References**: [EF blog recap](https://blog.ethereum.org/2026/05/02/soldogn-interop-recap), [EL hardening summary](https://hackmd.io/@nixorokish/EL-hardening-summary), [EIP-7708 summary](https://hackmd.io/@nixorokish/eip7708-summary), EIP-8037 working sessions ([pt1](https://notes.ethereum.org/@protocolsupport/8037-spec-breakout), [pt2](https://hackmd.io/@nixorokish/8037p2-summary), [pt3](https://hackmd.io/@nixorokish/8037p3-summary)).
+- **Future Fork Development Pipelining** The team decided to establish a new "N+1" (e.g., Hegota) coordination call. Peter accepted leadership of the EELS side and to moderate the call. The first priority is to define the N+1 process itself so red-complexity EIPs get earlier attention.
+
+#### References
+
+- [EF blog recap](https://blog.ethereum.org/2026/05/02/soldogn-interop-recap).
+- [EL hardening summary](https://hackmd.io/@nixorokish/EL-hardening-summary).
+- EIP-8037 working sessions ([pt1](https://notes.ethereum.org/@protocolsupport/8037-spec-breakout), [pt2](https://hackmd.io/@nixorokish/8037p2-summary), [pt3](https://hackmd.io/@nixorokish/8037p3-summary)).
+- [EIP-7708 summary](https://hackmd.io/@nixorokish/eip7708-summary).
+
+## Bogota
+
+- **FOCIL** (Bogota / next-fork prep): Felix added FOCIL src features and the first set of FOCIL tests in [PR #2643](https://github.com/ethereum/execution-specs/pull/2643), and built a new simulator for the `engine_getInclusionListV1` endpoint.
 
 ## Client Support
 
-April's client engagement happened largely through in-person conversation at Soldogn rather than via new GitHub issues. Zero STEEL-filed bugs landed in client repos in April, but bugs were raised verbally and via existing channels at the interop, and the `enginetest` direct interface agreement set up a structural shift toward catching client bugs in modular tests rather than in Hive.
+April's client engagement happened largely through in-person conversation at Soldogn. The `enginetest` direct interface agreement set up a structural shift toward catching client bugs in modular tests rather than in Hive.
 
 - **`enginetest` direct interface adoption** (cross-client commitment, [HackMD EL hardening summary](https://hackmd.io/@nixorokish/EL-hardening-summary)): Spencer drafted the `enginetest` direct interface to all mainnet clients. Nethermind put the interface to use during the interop and successfully detected regressions; Geth, Besu, Reth, Nimbus, Ethrex, and Erigon committed to adopt it at the Apr 30 EL hardening breakout. Spencer's tracking issue: [execution-specs #2650](https://github.com/ethereum/execution-specs/issues/2650). Reported performance gains: Nethermind from ~20 hours to minutes; Reth from 14 minutes to 1.5 minutes on Shanghai (10x).
-- **FOCIL Besu integration support** (Felix, remotely during Soldogn): Felix helped a Besu engineer integrate FOCIL, including a brief explainer on creating a branch to fill the tests. Besu fixed all bugs and now passes all FOCIL tests except 4 (those 4 limited only by the EIP-8037 fixture toggle: Felix's fixtures were filled in an "8037 doesn't exist" world that Besu cannot match).
+- **FOCIL Besu integration support** (Felix, remotely during Soldogn): Felix helped a Besu engineer integrate FOCIL, including a brief explainer on creating a branch to fill the tests. Besu fixed all bugs and now passes all non-8037 FOCIL tests.
 - **Besu BAL race condition** (Jochem, Apr 14 gaslighting): Besu passes all Glamsterdam benchmarks in sequential mode but fails some tests in optimized BAL plus parallel mode, with different tests failing across runs. Elevates BAL benchmarks to consensus-test status. Besu team aware.
 - **EIP-8037 multi-client implementation feedback** drove the April 30 spec revert: Reth, Erigon, and Geth all flagged issues with end-of-call-frame state gas accounting, prompting the impromptu morning breakout.
 - **Geth T8N for Amsterdam plus EVM tracing fix** (Felipe with Guillaume on-site at Soldogn): fixes long-broken EVM tracing.
