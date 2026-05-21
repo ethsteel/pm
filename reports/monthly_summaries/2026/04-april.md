@@ -40,6 +40,8 @@
 
 ---
 
+The remainder of this report was AI-assisted 🤖
+
 ## Glamsterdam
 
 ### Specs and Tests
