@@ -1,0 +1,45 @@
+name: Call Reminder
+
+on:
+  schedule:
+    # Tue–Fri 10:00–16:00 UTC — brackets every call in both BST and GMT.
+    - cron: "*/15 10-16 * * 2-5"
+  workflow_dispatch:
+    inputs:
+      lead_minutes:
+        description: "Minutes before the call to remind"
+        default: "60"
+      window_minutes:
+        description: "Look-ahead window width (keep equal to the cron cadence)"
+        default: "15"
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github/scripts
+            .github/calls.yml
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install "pyyaml>=6,<7" "icalendar>=5,<7" "recurring-ical-events>=2,<4"
+
+      - name: Send reminders
+        env:
+          # One or more calendar ICS feed URLs, comma-separated (events merged).
+          CALENDAR_ICS_URL: ${{ secrets.CALENDAR_ICS_URL }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ vars.DISCORD_CHANNEL_ID }}
+          EEST_ROLE_ID: ${{ vars.EEST_ROLE_ID }}
+          LEAD_MINUTES: ${{ github.event.inputs.lead_minutes || '60' }}
+          WINDOW_MINUTES: ${{ github.event.inputs.window_minutes || '15' }}
+        run: python .github/scripts/call_reminder.py
