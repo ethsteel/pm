@@ -55,7 +55,7 @@ jobs:
           month=$(date -d "$next_wed" +%B)
           year=$(date -d "$next_wed" +%Y)
 
-          title="STEEL Weekly Meeting, Wed ${day}${suffix} ${month}, ${year}"
+          title="Specs Weekly Meeting, Wed ${day}${suffix} ${month}, ${year}"
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
       - name: Open next week's meeting issue
