@@ -2,8 +2,9 @@ name: EL Spec Call Issue
 
 on:
   schedule:
-    # Wednesday 18:00 UTC — after the call: close this week's, open next week's
-    - cron: "0 18 * * 3"
+    # Thursday 17:00 UTC = 5pm UK in winter (6pm in summer) — after Thursday's
+    # call: close this week's issue (Tue & Thu), open next week's
+    - cron: "0 17 * * 4"
   workflow_dispatch:
 
 permissions:
@@ -32,30 +33,35 @@ jobs:
           if [ -n "$prev" ]; then
             gh issue close "$prev" \
               --repo "$GITHUB_REPOSITORY" \
-              --comment "Closed automatically after the EL spec call."
+              --comment "Closed automatically after Thursday's EL spec call."
             echo "Closed issue #$prev"
           else
             echo "No open call issue found"
           fi
 
-      - name: Compute next Wednesday date
+      - name: Compute next Tuesday and Thursday dates
         id: date
         run: |
-          next_wed=$(date -d "+7 days" +"%Y-%m-%d")
-          day=$(date -d "$next_wed" +%-d)
-
           # Ordinal suffix
-          case "$day" in
-            1|21|31) suffix="st" ;;
-            2|22)    suffix="nd" ;;
-            3|23)    suffix="rd" ;;
-            *)       suffix="th" ;;
-          esac
+          ordinal() {
+            case "$1" in
+              1|21|31) echo "st" ;;
+              2|22)    echo "nd" ;;
+              3|23)    echo "rd" ;;
+              *)       echo "th" ;;
+            esac
+          }
 
-          month=$(date -d "$next_wed" +%B)
-          year=$(date -d "$next_wed" +%Y)
+          next_tue=$(date -d "next tuesday" +"%Y-%m-%d")
+          next_thu=$(date -d "next thursday" +"%Y-%m-%d")
 
-          title="EL Spec Call, Wed ${day}${suffix} ${month}, ${year}"
+          tue_day=$(date -d "$next_tue" +%-d)
+          tue_month=$(date -d "$next_tue" +%B)
+          thu_day=$(date -d "$next_thu" +%-d)
+          thu_month=$(date -d "$next_thu" +%B)
+          year=$(date -d "$next_thu" +%Y)
+
+          title="EL Spec Call, Tue ${tue_day}$(ordinal "$tue_day") ${tue_month} & Thu ${thu_day}$(ordinal "$thu_day") ${thu_month}, ${year}"
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
       - name: Open next week's call issue

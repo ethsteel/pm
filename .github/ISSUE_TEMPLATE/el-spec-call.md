@@ -1,17 +1,24 @@
 ---
 name: EL Spec Call
-about: Weekly EL spec call agenda
-title: "EL Spec Call, Wed <date>"
+about: Agenda for the twice-weekly EL spec calls (Tuesday & Thursday)
+title: "EL Spec Call, Tue <date> & Thu <date>"
 labels: meeting
 assignees: ''
 ---
 
-### About the call
+### About the calls
 
-Cadence: Weekly, Wednesday @ REPLACE_TIME UTC
+Cadence: Twice weekly, Tuesday & Thursday @ REPLACE_TIME UK time
 Lead: REPLACE_LEAD
 Link: REPLACE_MEETING_LINK
 
-### Agenda
+This issue covers both of this week's EL spec calls. It is opened automatically
+after Thursday's call and closed after the following Thursday's call.
+
+### Tuesday Agenda
+
+- 
+
+### Thursday Agenda
 
 - 
