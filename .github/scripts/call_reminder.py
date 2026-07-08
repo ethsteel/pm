@@ -14,7 +14,7 @@ import yaml
 
 MEET_RE = re.compile(r"https://meet\.google\.com/[a-z0-9-]+", re.IGNORECASE)
 DISCORD_API = "https://discord.com/api/v10"
-USER_AGENT = "EestCallReminder (https://github.com/ethsteel/pm, 1.0)"
+USER_AGENT = "EestCallReminder (https://github.com/ethspecs/pm, 1.0)"
 
 
 def env(name, default=None, required=False):

@@ -6,8 +6,8 @@ calls:
 
   - match: "N+1"
     name: "N+1 call"
-    role: "REPLACE_STEEL_ROLE_ID"
+    role: "REPLACE_SPECS_ROLE_ID"
 
-  - match: "STEEL Team"
-    name: "STEEL call"
-    role: "REPLACE_STEEL_ROLE_ID"
+  - match: "SPECS Team"
+    name: "SPECS call"
+    role: "REPLACE_SPECS_ROLE_ID"
