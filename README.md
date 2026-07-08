@@ -1,2 +1,2 @@
 # pm
-Ethereum STEEL Project Management
+Ethereum SPECS Project Management

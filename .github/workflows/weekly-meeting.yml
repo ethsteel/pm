@@ -25,7 +25,7 @@ jobs:
           prev=$(gh issue list \
             --repo "$GITHUB_REPOSITORY" \
             --state open \
-            --search "STEEL Weekly Meeting in:title" \
+            --search "SPECS Weekly Meeting in:title" \
             --json number \
             --jq '.[0].number // empty')
 
@@ -55,7 +55,7 @@ jobs:
           month=$(date -d "$next_wed" +%B)
           year=$(date -d "$next_wed" +%Y)
 
-          title="STEEL Weekly Meeting, Wed ${day}${suffix} ${month}, ${year}"
+          title="SPECS Weekly Meeting, Wed ${day}${suffix} ${month}, ${year}"
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
       - name: Open next week's meeting issue
@@ -65,7 +65,7 @@ jobs:
         run: |
           # Strip YAML frontmatter from the issue template
           body=$(sed '1{/^---$/!q;};1,/^---$/d' \
-            .github/ISSUE_TEMPLATE/steel-weekly-meeting.md)
+            .github/ISSUE_TEMPLATE/specs-weekly-meeting.md)
 
           gh issue create \
             --repo "$GITHUB_REPOSITORY" \
