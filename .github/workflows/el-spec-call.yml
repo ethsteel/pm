@@ -1,4 +1,4 @@
-name: EL Spec Call Issue
+name: EL Specs Call Issue
 
 on:
   schedule:
@@ -13,68 +13,10 @@ permissions:
 
 jobs:
   rotate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: .github/ISSUE_TEMPLATE
-
-      - name: Close current call issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          prev=$(gh issue list \
-            --repo "$GITHUB_REPOSITORY" \
-            --state open \
-            --search "EL Spec Call in:title" \
-            --json number \
-            --jq '.[0].number // empty')
-
-          if [ -n "$prev" ]; then
-            gh issue close "$prev" \
-              --repo "$GITHUB_REPOSITORY" \
-              --comment "Closed automatically after Thursday's EL spec call."
-            echo "Closed issue #$prev"
-          else
-            echo "No open call issue found"
-          fi
-
-      - name: Compute next Tuesday and Thursday dates
-        id: date
-        run: |
-          # Ordinal suffix
-          ordinal() {
-            case "$1" in
-              1|21|31) echo "st" ;;
-              2|22)    echo "nd" ;;
-              3|23)    echo "rd" ;;
-              *)       echo "th" ;;
-            esac
-          }
-
-          next_tue=$(date -d "next tuesday" +"%Y-%m-%d")
-          next_thu=$(date -d "next thursday" +"%Y-%m-%d")
-
-          tue_day=$(date -d "$next_tue" +%-d)
-          tue_month=$(date -d "$next_tue" +%B)
-          thu_day=$(date -d "$next_thu" +%-d)
-          thu_month=$(date -d "$next_thu" +%B)
-          year=$(date -d "$next_thu" +%Y)
-
-          title="EL Spec Call, Tue ${tue_day}$(ordinal "$tue_day") ${tue_month} & Thu ${thu_day}$(ordinal "$thu_day") ${thu_month}, ${year}"
-          echo "title=$title" >> "$GITHUB_OUTPUT"
-
-      - name: Open next week's call issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TITLE: ${{ steps.date.outputs.title }}
-        run: |
-          # Strip YAML frontmatter from the issue template
-          body=$(sed '1{/^---$/!q;};1,/^---$/d' \
-            .github/ISSUE_TEMPLATE/el-spec-call.md)
-
-          gh issue create \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TITLE" \
-            --label "meeting" \
-            --body "$body"
+    uses: ./.github/workflows/rotate-call-issue.yml
+    with:
+      search-title: EL Specs Call
+      close-comment: Closed automatically after Thursday's EL Specs call.
+      days: tuesday thursday
+      title-template: "EL Specs Call, Tue {date1} & Thu {date2}, {year}"
+      template-file: el-spec-call.md

@@ -12,63 +12,10 @@ permissions:
 
 jobs:
   rotate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: .github/ISSUE_TEMPLATE
-
-      - name: Close current meeting issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          prev=$(gh issue list \
-            --repo "$GITHUB_REPOSITORY" \
-            --state open \
-            --search "SPECS Weekly Meeting in:title" \
-            --json number \
-            --jq '.[0].number // empty')
-
-          if [ -n "$prev" ]; then
-            gh issue close "$prev" \
-              --repo "$GITHUB_REPOSITORY" \
-              --comment "Closed automatically after the weekly call."
-            echo "Closed issue #$prev"
-          else
-            echo "No open meeting issue found"
-          fi
-
-      - name: Compute next Wednesday date
-        id: date
-        run: |
-          next_wed=$(date -d "+7 days" +"%Y-%m-%d")
-          day=$(date -d "$next_wed" +%-d)
-
-          # Ordinal suffix
-          case "$day" in
-            1|21|31) suffix="st" ;;
-            2|22)    suffix="nd" ;;
-            3|23)    suffix="rd" ;;
-            *)       suffix="th" ;;
-          esac
-
-          month=$(date -d "$next_wed" +%B)
-          year=$(date -d "$next_wed" +%Y)
-
-          title="SPECS Weekly Meeting, Wed ${day}${suffix} ${month}, ${year}"
-          echo "title=$title" >> "$GITHUB_OUTPUT"
-
-      - name: Open next week's meeting issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TITLE: ${{ steps.date.outputs.title }}
-        run: |
-          # Strip YAML frontmatter from the issue template
-          body=$(sed '1{/^---$/!q;};1,/^---$/d' \
-            .github/ISSUE_TEMPLATE/specs-weekly-meeting.md)
-
-          gh issue create \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TITLE" \
-            --label "meeting" \
-            --body "$body"
+    uses: ./.github/workflows/rotate-call-issue.yml
+    with:
+      search-title: SPECS Weekly Meeting
+      close-comment: Closed automatically after the weekly call.
+      days: wednesday
+      title-template: "SPECS Weekly Meeting, Wed {date1}, {year}"
+      template-file: specs-weekly-meeting.md
