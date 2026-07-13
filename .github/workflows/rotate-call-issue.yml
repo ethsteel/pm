@@ -1,0 +1,108 @@
+name: Rotate Call Issue
+
+# Reusable workflow shared by the call-issue rotations: closes the current
+# call issue and opens next week's from the matching issue template.
+
+on:
+  workflow_call:
+    inputs:
+      search-title:
+        description: Title text identifying the call's open issue
+        required: true
+        type: string
+      close-comment:
+        description: Comment left when closing the previous issue
+        required: true
+        type: string
+      days:
+        description: Space-separated weekdays of the call (e.g. "tuesday thursday")
+        required: true
+        type: string
+      title-template:
+        description: Issue title with {date1}, {date2}, ... and {year} placeholders
+        required: true
+        type: string
+      template-file:
+        description: Issue template filename under .github/ISSUE_TEMPLATE
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/ISSUE_TEMPLATE
+
+      - name: Close current call issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH: ${{ inputs.search-title }}
+          COMMENT: ${{ inputs.close-comment }}
+        run: |
+          prev=$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --search "$SEARCH in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -n "$prev" ]; then
+            gh issue close "$prev" \
+              --repo "$GITHUB_REPOSITORY" \
+              --comment "$COMMENT"
+            echo "Closed issue #$prev"
+          else
+            echo "No open call issue found"
+          fi
+
+      - name: Compute next call dates and title
+        id: date
+        env:
+          DAYS: ${{ inputs.days }}
+          TEMPLATE: ${{ inputs.title-template }}
+        run: |
+          # Ordinal suffix
+          ordinal() {
+            case "$1" in
+              1|21|31) echo "st" ;;
+              2|22)    echo "nd" ;;
+              3|23)    echo "rd" ;;
+              *)       echo "th" ;;
+            esac
+          }
+
+          title=$TEMPLATE
+          i=1
+          for weekday in $DAYS; do
+            next=$(date -d "next $weekday" +"%Y-%m-%d")
+            day=$(date -d "$next" +%-d)
+            month=$(date -d "$next" +%B)
+            year=$(date -d "$next" +%Y)
+            title=${title//"{date$i}"/"${day}$(ordinal "$day") ${month}"}
+            i=$((i + 1))
+          done
+          title=${title//"{year}"/"$year"}
+
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+
+      - name: Open next week's call issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: ${{ steps.date.outputs.title }}
+          TEMPLATE_FILE: ${{ inputs.template-file }}
+        run: |
+          # Strip YAML frontmatter from the issue template
+          body=$(sed '1{/^---$/!q;};1,/^---$/d' \
+            ".github/ISSUE_TEMPLATE/$TEMPLATE_FILE")
+
+          gh issue create \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TITLE" \
+            --label "meeting" \
+            --body "$body"
