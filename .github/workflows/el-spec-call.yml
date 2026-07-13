@@ -1,4 +1,4 @@
-name: EL Specs Call Issue
+name: EL Specs Calls Issue
 
 on:
   schedule:
@@ -15,8 +15,8 @@ jobs:
   rotate:
     uses: ./.github/workflows/rotate-call-issue.yml
     with:
-      search-title: EL Specs Call
+      search-title: EL Specs Calls
       close-comment: Closed automatically after Thursday's EL Specs call.
       days: tuesday thursday
-      title-template: "EL Specs Call, Tue {date1} & Thu {date2}, {year}"
+      title-template: "EL Specs Calls, Tue {date1} & Thu {date2}, {year}"
       template-file: el-spec-call.md

@@ -1,7 +1,7 @@
 ---
-name: EL Specs Call
+name: EL Specs Calls
 about: Agenda for the twice-weekly EL Specs calls (Tuesday & Thursday)
-title: "EL Specs Call, Tue <date> & Thu <date>"
+title: "EL Specs Calls, Tue <date> & Thu <date>"
 labels: meeting
 assignees: ''
 ---
