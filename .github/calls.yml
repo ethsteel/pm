@@ -1,0 +1,13 @@
+# Calls to remind about. Per entry: match (title substring), name (ping text), role (role ID; default EEST_ROLE_ID), users (user IDs).
+
+calls:
+  - match: "Testing Team"
+    name: "Testing call"
+
+  - match: "N+1"
+    name: "N+1 call"
+    role: "REPLACE_SPECS_ROLE_ID"
+
+  - match: "SPECS Team"
+    name: "SPECS call"
+    role: "REPLACE_SPECS_ROLE_ID"
