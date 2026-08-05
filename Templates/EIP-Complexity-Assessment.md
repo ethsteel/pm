@@ -386,7 +386,7 @@ Per-row notes:
   checklist had a row for blob gas and none for this.
 - **Cross-EIP interactions.** The `+1 per 3 additional EIPs` increment is a
   judgement call, not a calibrated figure. It exists because EIP-7928 interacted
-  with 11 EIPs and scored the same 3 as an EIP interacting with three.
+  with 12 EIPs and scored the same 3 as an EIP interacting with three.
 - **Engine API encoding changes** was removed. It described a wire-format change
   at the Engine API layer (JSON -> RLP/SSZ), but such migrations are coordinated
   outside the EIP process, so an EIP-scoped assessment has no use for the row. It
