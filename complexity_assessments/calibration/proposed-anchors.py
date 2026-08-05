@@ -25,11 +25,11 @@ MATURE_WEEKS = 10.0
 # ---------------------------------------------------------------------------
 # Proposed anchor scores. Evidence for each is cited in proposed-anchors.md §3.
 #
-#   O  sub-opcode failure-point observability  -- MULTIPLIER, x 2^(O/2)
+#   O  state-access ordering within opcodes    -- additive (see note below)
 #   G  state gas accounting changes            -- additive
 #   U  specification underdetermination        -- additive
 #   P  test-framework primitives required      -- additive
-#   R  retroactive expectation obligation      -- additive
+#   R  new invariant on pre-existing tests     -- additive
 # ---------------------------------------------------------------------------
 O = {"7928": 3, "8037": 1, "8038": 1}
 G = {"8037": 3, "8038": 2}
@@ -46,11 +46,27 @@ def g(d: dict, eip: str) -> int:
 
 
 # ------------------------------------------------------------------ load data
+ROW_RE = re.compile(r"^\|\s*\*\*(.+?)\*\*\s*\|([^|]*)\|", re.M)
+
 data = json.loads((HERE / "amsterdam-dataset.json").read_text())
 scores: dict[str, int] = {}
+per_anchor: dict[str, dict[str, int]] = {}
 for f in sorted((HERE.parent / "EIPs").glob("EIP-*.md")):
-    if m := SCORE_RE.search(f.read_text()):
-        scores[f.stem.split("-")[1]] = int(m.group(1))
+    eip = f.stem.split("-")[1]
+    txt = f.read_text()
+    if m := SCORE_RE.search(txt):
+        scores[eip] = int(m.group(1))
+    i = txt.find("### Checklist")
+    if i < 0:
+        continue
+    j = txt.find("#### Special", i)
+    rows_ = {}
+    for name, val in ROW_RE.findall(txt[i: j if j > 0 else len(txt)]):
+        # cells read "3 + 3 + 3" when an anchor is counted more than once
+        if nums := [int(x) for x in re.findall(r"\d+", val)]:
+            rows_[name.strip()] = sum(nums)
+    if rows_:
+        per_anchor[eip] = rows_
 
 for r in data["eips"]:
     r["TEU"] = round(r["prs"] + r["review_load"] / 10, 1)
@@ -130,6 +146,47 @@ for label, fn in STRUCTURES:
     print(f"{label:40}{fn('7928'):>9.0f}{pred:>11.0f}{pred / actual:>11.2f}x"
           f"{loo(mature, fn):>6.0f}%")
 
+# ------------------------------------- §3 can the data identify the multiplier?
+print("\n" + "=" * 74)
+print("3. TRY EVERY EXISTING ANCHOR AS THE MULTIPLIER")
+print("=" * 74)
+print("\nS_eff = (base - row) x 2^(row/2), so the row is not double-counted.")
+print("If many rows work, the data cannot identify which row is multiplicative.\n")
+print(f"{'anchor used as multiplier':44}{'7928':>6}{'others>0':>10}{'LOO':>7}{'OOS':>8}")
+print("-" * 75)
+live = [n for n in sorted({n for e in per_anchor for n in per_anchor[e]})
+        if any(per_anchor[e].get(n, 0) for e in (r["eip"] for r in mature)
+               if e in per_anchor)]
+sweep = []
+for n in live:
+    def sf(e, n=n):
+        row = per_anchor.get(e, {}).get(n, 0)
+        return max(BASE[e] - row, 1) * MULT_BASE ** (row / 2)
+    pred, actual = out_of_sample(mature, sf)
+    others = sum(1 for r in mature
+                 if r["eip"] != "7928" and per_anchor.get(r["eip"], {}).get(n, 0))
+    sweep.append((pred / actual, n, per_anchor.get("7928", {}).get(n, 0),
+                  others, loo(mature, sf)))
+for oos, n, s7, others, l in sorted(sweep, key=lambda t: -t[0]):
+    mark = "  <-- lands it" if 0.85 <= oos <= 1.2 else ""
+    print(f"{n[:43]:44}{s7:>6}{others:>10}{l:>6.0f}%{oos:>7.2f}x{mark}")
+print("\nThe rows that 'work' are the ones 7928 scores high and nobody else does")
+print("(others>0 near zero). That is a 7928 indicator, not a mechanism. Rows many")
+print("EIPs score -- edge/boundary, pre-existing tests, gas rules -- all fail,")
+print("because multiplying them lifts everyone and the refit absorbs it.")
+
+print("\n--- and independent multipliers compound past usability ---\n")
+DIM = ["Patterns affecting pre-existing tests", "Cross-EIP interactions",
+       "New transaction types", "Encoding changes (RLP/SSZ)"]
+print(f"{'EIP':>6}{'base':>6}{'product of 2^(row/2) over 4 dimensional rows':>46}{'S_eff':>8}")
+for e in sorted((r["eip"] for r in rows), key=lambda e: -BASE[e])[:4]:
+    prod = math.prod(MULT_BASE ** (per_anchor.get(e, {}).get(n, 0) / 2) for n in DIM)
+    print(f"{e:>6}{BASE[e]:>6}{prod:>46.1f}{BASE[e] * prod:>8.0f}")
+print("\n8037's 'pre-existing tests' cell is written '3 + 3 + 3' = 9, so a")
+print("multiplicative reading gives it 2^4.5 = 22.6x. Compounding is unusable:")
+print("axes ADD in the exponent, so the stable form is ONE multiplier whose")
+print("score counts axes -- not N independently multiplicative rows.")
+
 # ------------------------------------------------------------- §4 validation
 print("\n" + "=" * 74)
 print("4. VALIDATION OF THE FULL PROPOSAL")
@@ -139,7 +196,7 @@ MODELS = [
     ("current checklist", lambda e: BASE[e]),
     ("+ four additive rows only",
      lambda e: BASE[e] + g(U, e) + g(P, e) + g(R, e) + g(G, e)),
-    ("+ sub-opcode multiplier",
+    ("+ state-access ordering as mult",
      lambda e: (BASE[e] + g(U, e) + g(P, e) + g(R, e)) * MULT_BASE ** (g(O, e) / 2)),
     ("+ multiplier + state gas row",
      lambda e: (BASE[e] + g(U, e) + g(P, e) + g(R, e) + g(G, e))

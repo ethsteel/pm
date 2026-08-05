@@ -70,37 +70,128 @@ Holding the new anchor's *score* fixed and changing only how it enters the total
 | additive row at 5× weight | 44 | 89 | 0.59× |
 | **multiplier `× 2^(score/2)`** | **82** | **154** | **1.03×** |
 
-*(Fitted on the other eight mature EIPs only, then asked to predict 7928. The
-multiplier is the only structure that lands it.)*
+*(Fitted on the other eight mature EIPs only, then asked to predict 7928.)*
 
 Even at 5× weight — 15 additive points, more than a fifth of the whole 72-point
-scale — an additive row gets to 0.59×. This is not a tuning problem.
+scale — an additive row gets to 0.59×. This is not a tuning problem: a sum cannot
+approximate a product over this range.
 
 The evaluators already knew this: EIP-8037's checklist is written as `2 + 2 + 3 + 1`
 and `3 + 3 + 3`, hand-rolling multiplication because the form doesn't support it.
-Formalise what they were already doing.
+
+**The arithmetic above is sound. What it does *not* establish is that the
+state-access ordering row is the multiplier — see the next section.**
+
+## 2b. Why the data cannot identify *which* row is the multiplier
+
+Running the same test with every existing anchor as the multiplier
+(`S_eff = (base − row) × 2^(row/2)`, so the row isn't double-counted):
+
+| Anchor used as multiplier | 7928's score | Other EIPs scoring >0 | 7928 out-of-sample |
+|---|---:|---:|---:|
+| Security risks | 3 | 0 | 1.40× |
+| Engine API changes | 3 | 1 | 1.35× |
+| New block / header fields | 3 | 1 | **1.10×** |
+| Block syncing changes | 2 | 0 | **0.93×** |
+| Performance risks | 3 | 3 | 0.77× |
+| Transition-tool interface | 2 | 2 | 0.75× |
+| Cross-EIP interactions | 3 | 1 | 0.68× |
+| Edge/boundary conditions | 3 | 7 | 0.38× |
+| EVM Gas rule changes | 3 | 5 | 0.21× |
+| Patterns affecting pre-existing tests | 2 | 6 | 0.16× |
+
+**Six existing rows work about as well as the proposed one, and they work for a
+bad reason.** Look at the third column: the rows that "land" 7928 are exactly the
+rows 7928 scores high on and nobody else scores at all. Made multiplicative, such
+a row is a 7928 indicator variable — it identifies 7928 rather than explaining it.
+Rows that many EIPs score (edge/boundary: 7 others; pre-existing tests: 6; gas
+rules: 5) all fail, because multiplying them lifts everyone and the refit absorbs
+the change.
+
+So the out-of-sample test in §2 is weaker evidence than it looks. It guards
+against fitting 7928's *measured TEU*, but not against having chosen a variable
+that happens to single 7928 out. With one high-cost EIP in the sample, **no
+statistical test can distinguish a mechanism from a label.**
+
+### And you cannot simply make several rows multiplicative
+
+Independent multipliers compound:
+
+| EIP | base | product over 4 dimensional rows | S_eff |
+|---|---:|---:|---:|
+| 7928 | 29 | 5.7× | 164 |
+| 8037 | 28 | **45.3×** | **1267** |
+| 8038 | 20 | 8.0× | 160 |
+
+8037 explodes because its "pre-existing tests" cell is written `3 + 3 + 3` = 9, and
+`2^4.5` = 22.6. Nor can the axis count be recovered by re-reading the existing
+rows as dimensions: try it and almost every EIP saturates at the cap, because
+those rows encode *severity*, not dimensionality.
+
+The resolution is arithmetic: axes **add in the exponent**
+(`2^(a/2) × 2^(b/2) = 2^((a+b)/2)`). So the only stable form is **one** multiplier
+whose score counts axes, scored independently of the severity rows — not N
+individually multiplicative rows.
 
 ## 3. Proposed anchors
 
-### 3.1 Sub-opcode failure-point observability — **MULTIPLIER**
+### 3.1 State-access ordering within opcode execution — additive
 
-> Makes it consensus-observable *where inside an opcode's execution* a failure
-> occurred — in particular whether gas ran out before or after a state access.
-> Previously only the final state mattered.
+> Changes *where inside an opcode's execution* state is accessed, or where gas is
+> charged relative to that access.
 
-- **0.** Failure points inside an opcode are not observable; only final state matters.
-- **1.** A single opcode or narrow family gains an observable internal failure point, with one gas boundary to settle.
-- **2.** Multiple opcodes gain observable internal failure points, but the same rule fixes the boundary in each case.
-- **3.** Every state-accessing opcode gains an observable internal failure point, and the boundary must be settled per-opcode because the gas-charge site differs.
+**Worded for the world after EIP-7928, not for the transition into it.** Since the
+BAL, every state access is consensus-observable — an address or slot appears only
+if execution had enough gas to reach it — so the ordering of gas charges and state
+accesses inside an opcode is consensus rather than a client implementation detail.
+Introducing that observability was a one-time event that has already happened; what
+recurs is EIPs *moving* the ordering.
 
-**This row multiplies the additive subtotal by `2^(score/2)`** rather than adding
-to it. Justification: each such boundary must be re-tested across every other
-dimension that can change the answer, so it scales the existing matrix instead of
-extending it.
+- **0.** No change to where state is accessed, or to where gas is charged relative to a state access, within any opcode.
+- **1.** A single opcode's state-access or gas-charge ordering changes.
+- **2.** Multiple opcodes' ordering changes, or a new state-accessing operation is introduced whose position in the order must be settled.
+- **3.** The ordering rule changes for a whole class of state-accessing opcodes at once, or what counts as a recordable state access is redefined — requiring existing BAL vectors to be re-derived across opcodes and forks.
 
 > Do not confuse this with **Modified opcodes**. That row asks whether an
-> opcode's *result* changed. This row asks whether the *path to the result*
-> became observable. 7928 is 0 on the former and 3 on the latter.
+> opcode's *result* changed. This row asks about the *path to the result*, now
+> observable even when the result is identical. 7928 is 0 on the former and 3 on
+> the latter — which is why the most expensive part of the work scored zero.
+
+The reframing does not disturb the scores used below: 7928 remains a 3 (it
+reordered gas-charge sites across an entire class of opcodes), 8037 and 8038
+remain 1 (each moves where gas is charged relative to a state write).
+
+This is the row whose absence is best evidenced (§1), independent of any argument
+about multipliers. Add it additively now.
+
+### 3.1b Test-matrix dimensionality — **the multiplier**, if one is adopted
+
+Per §2b, a multiplier cannot be one of the severity rows, and there cannot be
+several. If a multiplier is adopted it has to be a single row that asks directly
+for the axis count, scored independently of everything else:
+
+> How many **independent axes** does this EIP add to the test matrix — dimensions
+> across which every other case must be re-run to get a different answer?
+
+- **0.** No new axis. Cases are enumerable as a list.
+- **1.** One new axis (e.g. every case must be run warm and cold).
+- **2.** Two independent new axes.
+- **3.** Three or more independent new axes.
+
+`S_eff = additive_subtotal × 2^(axes / 2)`. The base 2 and the `/2` are chosen so
+three axes give ≈2.8× rather than 8×, on the assumption that axes are partly
+redundant in practice. **Neither the base nor the exponent is measured** — only the
+`axes = 3` endpoint is, from one EIP.
+
+For 7928 the three axes are: the intra-opcode gas boundary (§3.1), the 11-EIP cross
+product, and the BAL expectation attaching to every existing test. For 8037, one:
+the gas boundary re-run across the static suite.
+
+**Recommendation: do not adopt this yet.** Add rows 3.1–3.6 additively, and record
+the axis count on assessments as an *unscored observation* for a fork or two.
+When a second EIP scores 2 or 3 on it, there will be enough data to tell whether
+the multiplier is real and what its base should be. Adopting it now means
+hard-coding a curve fitted to a single point.
 
 ### 3.2 State gas accounting changes — additive
 
@@ -144,20 +235,25 @@ Evidence: 7928 added ~2.4 KLOC of `BlockAccessListExpectation`,
 `BalAccountExpectation`, `BalAccountAbsentValues` and a modifier DSL — 9 framework
 units and 9 801 lines of framework churn, 6.8× the next highest.
 
-### 3.5 Retroactive expectation obligation — additive
+### 3.5 New invariant on pre-existing tests — additive
 
-> Existing tests must *carry a new validated artifact*. Distinct from
-> **Patterns affecting pre-existing tests**, which asks whether they must be
-> reworked.
+> Tests that are **not about this EIP** must nonetheless check something this EIP
+> produces. Their logic doesn't change; they gain a new thing to assert.
+>
+> Deliberately named to sit alongside **Patterns affecting pre-existing tests**.
+> That row asks whether existing tests must be *reworked*; this one asks whether
+> they must *additionally assert something new*. 7928 is a 2 on the first and a 3
+> on the second.
 
-- **0.** Existing tests are unaffected.
-- **1.** A contrived subset of existing tests must carry a new expectation.
-- **2.** A broad category must carry a new expectation, mechanically.
-- **3.** Every test for the fork carries a new validated artifact, and pre-fork vectors need re-derivation.
+- **0.** Pre-existing tests assert nothing new.
+- **1.** A narrow, contrived category of pre-existing tests gains a new assertion.
+- **2.** A broad category gains a new assertion, applied mechanically.
+- **3.** Every test in the fork gains the assertion regardless of what it tests, and pre-fork vectors must be re-derived to satisfy it.
 
-7928 scored only 2 on the existing "pre-existing tests" row — correctly, since
-little was *reworked*. But every Amsterdam-filled test now generates and validates
-a BAL, and Osaka's BAL checks had to be moved. That is a different cost.
+7928 scored only 2 on the "pre-existing tests" row — correctly, since little was
+*reworked*. But every Amsterdam-filled test now generates and validates a BAL
+whether or not it has anything to do with access lists, and Osaka's BAL checks had
+to be moved. That is a different cost, and it had nowhere to be recorded.
 
 ### 3.6 Uncap Cross-EIP interactions
 
@@ -169,13 +265,16 @@ already uses.
 
 ## 4. Validation
 
-Scoring all 12 Amsterdam EIPs on the proposals and refitting:
+Scoring all 12 Amsterdam EIPs on the proposals and refitting. **Read rows 3 and 4
+of this table together with §2b** — the fit statistics do not discriminate between
+the state-access ordering row and six other candidate multipliers, so they are shown to
+document the arithmetic, not to validate the choice of row.
 
 | Model | r | exponent k | LOO error | 7928 ratio | 8037 ratio |
 |---|---:|---:|---:|---:|---:|
 | current checklist | 0.920 | 1.62 | 21 % | 1.68 | 0.92 |
 | + the four additive rows only (U, P, R, G) | 0.916 | 1.55 | 31 % | 1.66 | 0.86 |
-| + sub-opcode multiplier | 0.996 | 1.12 | 13 % | 0.97 | 1.20 |
+| + state-access ordering as multiplier | 0.996 | 1.12 | 13 % | 0.97 | 1.20 |
 | **+ multiplier + state gas row** | **0.998** | **1.11** | **13 %** | **1.01** | **1.12** |
 
 Note the second row: **the four additive anchors on their own make the fit
@@ -183,11 +282,11 @@ slightly worse** (r 0.920 → 0.916, LOO 21 % → 31 %). They add points to 7928
 they add points to almost everything else too, so the refitted curve moves with
 them and 7928's ratio barely budges (1.68 → 1.66). Only the multiplier changes
 the shape. The additive rows are worth adding for coverage — they let evaluators
-record costs that currently have nowhere to go — but they are not what fixes
-7928.
+record costs that currently have nowhere to go — but they are not what closes the
+gap on EIP-7928.
 
 ```
-S_eff = (base + underdetermination + framework + retro + state_gas) × 2^(sub_opcode / 2)
+S_eff = (base + underdetermination + framework + new_invariant + state_gas) × 2^(state_access_ordering / 2)
 TEU   = 0.83 × S_eff^1.11
 ```
 
@@ -212,18 +311,36 @@ Per EIP, with `add` = additive subtotal and `O` = the multiplier row:
 
 ### The exponent collapses to ~1.1
 
-This is the most interesting result and the best argument that the proposals
-describe something real. The 1.62 exponent in the current calibration was **the
-power law compensating for a missing multiplicative term**. Express the product
-structure explicitly and the residual super-linearity nearly vanishes — cost
-becomes close to linear in the effort-weighted score. "Complexity is mysteriously
-super-linear" was the wrong conclusion; "the score was missing a multiplier" is
-the right one.
+The 1.62 exponent in the current calibration behaves like **a power law
+compensating for a missing multiplicative term**. Introduce a multiplicative term
+of roughly the right size and the residual super-linearity nearly vanishes — cost
+becomes close to linear in the effort-weighted score.
+
+This is suggestive rather than conclusive, and for the same reason as everything
+else here: any of the six candidate rows from §2b produces a similar collapse
+(exponents 1.07–1.36). What the collapse supports is the *shape* of the model —
+that some multiplicative term is missing — not the identity of the row supplying
+it. "Complexity is mysteriously super-linear" is probably the wrong reading; "the
+score is missing a product term" is the better one, and which product is still
+open.
 
 ## 5. Tier rescaling
 
-The additive ceiling rises from 72 to 84 (four new 0–3 rows), and `S_eff` can
-reach `84 × 2.83 = 238`.
+**As adopted in the template** (additive rows only, no multiplier): the anchor set
+goes 24 → 28 rows — five added, **Engine API encoding changes** removed — so the
+nominal ceiling is 72 → 84, and **Cross-EIP interactions** is uncapped on top of
+that. Thresholds scale by 84/72: 🟢 `<12`, 🟡 `12–22`, 🔴 `≥23`. Amsterdam tier
+membership is unchanged except EIP-7778, which moves 🟡 → 🟢 at 11 points.
+
+> Engine API encoding changes described a JSON → RLP/SSZ migration at the Engine
+> API layer. Those are coordinated outside the EIP process, so the row has no use
+> in an EIP-scoped assessment. It was scored 0 or blank in all 28 assessments on
+> the previous revision, and never had level definitions, so removing it changes
+> no historical total. **Encoding changes (RLP/SSZ)** already covers the
+> "interfaces level" if an EIP ever carries one.
+
+**If the deferred multiplier (§3.1b) were also adopted**, `S_eff` could reach
+`84 × 2.83 = 238` and the thresholds would instead be:
 
 | Tier | On `S_eff` | Amsterdam members |
 |---|---|---|
@@ -231,33 +348,38 @@ reach `84 × 2.83 = 238`.
 | 🟡 Medium | 12 – 33 | 2780 |
 | 🔴 High | ≥ 34 | 8038, 8037, 7928 |
 
-Thresholds chosen to preserve the current tier populations. Note 7928 at 107 is
-now visibly 3× the next-worst EIP rather than sitting one point above it — which
-matches what actually happened.
+Also chosen to preserve tier populations. Under this variant 7928 lands at 107 —
+visibly 3× the next-worst EIP rather than sitting one point above it, which
+matches what actually happened. This is the variant to revisit once a second fork
+supplies a second observation on the axis-count row.
 
 ## 6. Caveats
 
 1. **`r = 0.998` is not a credible accuracy claim.** Nine points and a
-   hand-assigned four-level variable can fit almost anything. The credible
-   evidence is the out-of-sample test in §2 (fit without 7928, predict 7928:
-   0.40× → 1.03×), the LOO error dropping 21 % → 13 %, and the exponent
-   collapsing to ~1.1.
-2. **The multiplier's calibration rests on one observation.** 7928 is the only
-   EIP scoring 3 on it. `2^(score/2)` is a plausible shape, not a measured one —
-   only the endpoint is measured. A second fork with a 2 or 3 on this row is
-   needed before the intermediate levels mean anything.
-3. **All proposed scores are assigned in hindsight**, by reading the repo. The
+   hand-assigned four-level variable can fit almost anything.
+2. **The out-of-sample test is weaker than it appears.** Fitting without 7928 and
+   predicting it (0.40× → 1.03×) rules out fitting to 7928's measured TEU. It does
+   *not* rule out having picked a variable that singles 7928 out — and §2b shows
+   six existing rows do just as well when made multiplicative, purely because
+   7928 is the only EIP that scores them. With one high-cost EIP in the sample, no
+   statistical test can separate a mechanism from a label.
+3. **The multiplier is therefore a design proposal, not a finding.** What the data
+   supports is the *negative* result: a sum cannot approximate a product, so no
+   additive row at any weight closes the gap. Which row multiplies, and with what
+   base, is unidentified. Hence the recommendation in §3.1b to record the axis
+   count unscored until a second fork provides a second observation.
+4. **All proposed scores are assigned in hindsight**, by reading the repo. The
    real test is whether an evaluator can score these rows *at CFI time*, before
    the work. Rows 3.2–3.5 look assessable a priori. Row 3.1 is the risky one:
    recognising that an EIP makes an execution detail newly observable is exactly
    the insight 7928's original evaluation missed.
-4. **The state gas row changes nothing retroactively** except 8037, which
+5. **The state gas row changes nothing retroactively** except 8037, which
    introduced the mechanism. Its value is forward-looking: any Amsterdam+ EIP
    touching state gas costs now has a row to be scored on.
-5. **Independent evidence for the additive rows is thin.** 3.3 (spec
-   underdetermination) is scored above 0 for only four EIPs, 3.5 (retro
-   expectations) for six. They improve the fit but each rests on a handful of
-   observations.
+6. **Independent evidence for the additive rows is thin.** 3.3 (spec
+   underdetermination) is scored above 0 for only four EIPs, 3.5 (new invariant on
+   pre-existing tests) for six. They improve the fit but each rests on a handful
+   of observations.
 
 ## 7. Reproducing
 
