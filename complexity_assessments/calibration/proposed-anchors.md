@@ -183,7 +183,7 @@ three axes give ≈2.8× rather than 8×, on the assumption that axes are partly
 redundant in practice. **Neither the base nor the exponent is measured** — only the
 `axes = 3` endpoint is, from one EIP.
 
-For 7928 the three axes are: the intra-opcode gas boundary (§3.1), the 11-EIP cross
+For 7928 the three axes are: the intra-opcode gas boundary (§3.1), the 12-EIP cross
 product, and the BAL expectation attaching to every existing test. For 8037, one:
 the gas boundary re-run across the static suite.
 
@@ -257,7 +257,7 @@ to be moved. That is a different cost, and it had nowhere to be recorded.
 
 ### 3.6 Uncap Cross-EIP interactions
 
-The existing row saturates at 3. 7928's rationale names **11** interacting EIPs
+The existing row saturates at 3. 7928's rationale names **12** interacting EIPs
 (2929, 2930, 1559, 6780, 7702, 4895, 2935, 4788, 7002, 7251, 1153, 214); 8038
 names 6; everyone else names 0. Let level 3 scale with the count — e.g. `3 + 1`
 per additional 4 EIPs beyond the first 3 — in the same style the 8037 assessment
