@@ -1,5 +1,7 @@
 # EIP-NNNN: EIP Title
 
+Checklist revision: **2** (28 anchors) — see [Revision Notes](#revision-notes)
+
 Link: https://eips.ethereum.org/EIPS/eip-NNNN
 
 ## Execution Specs
@@ -22,6 +24,21 @@ New EVM gas accounting rules
 - 2. A new gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
 - 3. A new gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
 
+##### State-access ordering within opcode execution
+
+Changes *where inside an opcode's execution* state is accessed, or where gas is charged relative to that access. Because a state access is recorded in the block-level access list only if execution had enough gas to reach it, this ordering is consensus-critical: moving it changes the BAL at every gas boundary of every affected opcode.
+
+- 0. No change to where state is accessed, or to where gas is charged relative to a state access, within any opcode.
+- 1. A single opcode's state-access or gas-charge ordering changes.
+- 2. Multiple opcodes' ordering changes, or a new state-accessing operation is introduced whose position in the order must be settled.
+- 3. The ordering rule changes for a whole class of state-accessing opcodes at once, or what counts as a recordable state access is redefined — requiring existing BAL vectors to be re-derived across opcodes and forks.
+
+*Distinct from "Modified opcodes", which asks whether an opcode's **result** changed. This row asks about the **path to the result**, which is observable even when the result is identical. An EIP can be 0 on that row and 3 on this one.
+
+*Score changes **to** the ordering. Do not score the fact that state accesses are observable — they always are.
+
+*Each boundary must be re-tested against every other dimension that can change the answer (cold/warm, static/non-static, delegated/direct, revert/success), so the case count grows multiplicatively rather than additively. Note this explicitly under Special Considerations.
+
 ##### Blob gas accounting changes
 
 New Blob gas accounting rules which potentially affect pre-existing tests
@@ -30,6 +47,17 @@ New Blob gas accounting rules which potentially affect pre-existing tests
 - 1. Existing blob gas accounting mechanism is updated.
 - 2. A new blob gas accounting mechanism is introduced but it does not affect existing mechanisms nor does it affect existing tests.
 - 3. A new blob gas accounting mechanism is introduced and affects existing mechanisms which in turn affect existing tests.
+
+##### State gas accounting changes
+
+New state gas accounting rules. State gas is the cost of *writing* state, as opposed to accessing or executing it: `StateGasCosts`, `COST_PER_STATE_BYTE`, the block-level state gas budget, and the spill path into execution gas.
+
+- 0. No state gas accounting changes.
+- 1. An existing state gas cost or `STATE_BYTES_PER_*` rate is adjusted.
+- 2. A new state-gas-charging site is introduced, or the block-level state gas budget or reservoir allocation is modified.
+- 3. A new state gas charging mechanism is introduced, or the spill interaction between state gas and execution gas is modified, affecting existing gas tests.
+
+*Harder to test than blob gas: the spill path means state gas cannot be metered independently of execution gas, and some costs (e.g. `NEW_ACCOUNT`) are state-dependent.
 
 ##### New EVM gas refund
 
@@ -49,6 +77,17 @@ Implements a new validation mechanism or rule that translates in reworking pre-e
 - 2. Considerable subset of existing tests are affected by this change but involves only a contrived category of tests.
 - 3. Major subset of existing tests are affected, including diverse category of tests (benchmarks, static, multiple forks, etc.).
 
+##### New invariant on pre-existing tests
+
+Tests that are **not about this EIP** must nonetheless assert something this EIP produces. Their logic does not change; they gain a new thing to check.
+
+- 0. Pre-existing tests assert nothing new.
+- 1. A narrow, contrived category of pre-existing tests gains a new assertion.
+- 2. A broad category gains a new assertion, applied mechanically.
+- 3. Every test in the fork gains the assertion regardless of what it tests, and pre-fork vectors must be re-derived to satisfy it.
+
+*Paired with the row above, and easy to confuse with it. "Patterns affecting pre-existing tests" asks whether existing tests must be **reworked**; this row asks whether they must **additionally assert something new**. Score both — an EIP can be low on one and high on the other.
+
 ##### Transition-tool interface changes
 
 Modifies or adds new fields to the transition tool interface.
@@ -59,6 +98,15 @@ Modifies or adds new fields to the transition tool interface.
 - 3. Multiple new fields and a new mechanism has to be introduced to the transition tool interface.
 
 *Special consideration must be paid to this section if the EIP introduces a mechanism that requires the state transition tool to be aware whether the block it is processing is the fork-activation block.
+
+##### New test-framework primitives
+
+Requires new abstractions in the test framework itself — expectation types, modifiers, helpers — beyond writing test functions with what already exists.
+
+- 0. Existing test primitives suffice.
+- 1. Existing primitives need minor extension.
+- 2. New expectation or modifier primitives are required, reusable within this EIP's own test suite.
+- 3. New framework-level primitives are required that become a permanent part of the framework and are used by other EIPs' tests.
 
 ##### Cryptography
 
@@ -159,6 +207,8 @@ Introduces encoding changes at the transaction/block/interfaces level
 - 0. No encoding changes are introduced at the transaction, block, or interfaces levels.
 - 3. An encoding change is introduced at transaction, block or interfaces level (e.g. RLP -> SSZ).
 
+*"Interfaces level" includes the Engine API. Score an Engine API encoding change (e.g. JSON -> SSZ) here.
+
 ##### New transaction types
 
 Introduces a new transaction type
@@ -209,6 +259,17 @@ Introduces or modifies mechanisms that could compromise the security of the chai
 - 2. The introduced mechanisms interact with a limited number of existing components, slightly altering their security assumptions and requiring a targeted security review or fuzzing.
 - 3. The introduced mechanisms interact with multiple existing components, including critical ones, substantially altering their security assumptions and requiring an extensive security review and fuzzing.
 
+##### Unspecified behavior requiring cross-client consensus
+
+The EIP text does not determine the answer for cases a test can construct. Clients must agree on a previously unspecified detail before tests can be baselined. The cost here is coordination and re-baselining, not test writing.
+
+- 0. The EIP text determines the answer for every case a test could construct.
+- 1. A few details are unspecified but have an obvious intended reading.
+- 2. Details require client agreement before tests can be written, but they are localized.
+- 3. A previously unspecified *and previously unobservable* behavior becomes consensus-critical; expect tests to be re-baselined on each round of EIP amendment.
+
+*Score this from the EIP's state at assessment time: whether it has client implementations, whether it has been through a devnet, and how many open questions remain on its discussion thread.
+
 ##### Cross-EIP interactions
 
 Introduces or modifies mechanisms that affect other EIPs in either the same or past forks.
@@ -217,21 +278,27 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 - 1. The EIP interacts with one or more other EIPs in a non-critical and limited way but can be tested independently for the most part.
 - 2. The EIP depends on or modifies one or more other EIPs such that coordinated testing and consideration is required, but interactions are limited in scope and not complex.
 - 3. The EIP has strong interdependencies with multiple EIPs, requiring extensive coordinated cross-EIP testing as well as potential re-design of existing test vectors.
+- **+1 for every 3 additional interacting EIPs beyond the first 3**, each of which requires its own coordinated test cases. List the EIPs in the rationale.
+
+*This row is intentionally uncapped, unlike every other anchor: each interacting EIP is another axis of the test matrix, so a ceiling would make a 12-EIP product indistinguishable from a 3-EIP one.
 
 ### Checklist
 
 | Anchor | Score (0–3) | Rationale |
 |---|---:|---|
 | **EVM Gas rule changes** |   |   |
+| **State-access ordering within opcode execution** |   |   |
 | **Blob gas accounting changes** |   |   |
+| **State gas accounting changes** |   |   |
 | **New EVM gas refund** |   |   |
 | **Patterns affecting pre-existing tests** |   |   |
+| **New invariant on pre-existing tests** |   |   |
 | **Transition-tool interface changes** |   |   |
+| **New test-framework primitives** |   |   |
 | **Cryptography-related testing** |   |   |
 | **Edge/boundary conditions** |   |   |
 | **Block syncing changes** |   |   |
 | **Engine API changes** |   |   |
-| **Engine API encoding changes** |   |   |
 | **Added system contracts** |   |   |
 | **Modified system contracts** |   |   |
 | **Added opcodes** |   |   |
@@ -245,7 +312,8 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 | **New fork activation mechanism** |   |   |
 | **Performance risks** |   |   |
 | **Security risks** |   |   |
-| **Cross-EIP interactions** |   |   |
+| **Unspecified behavior requiring cross-client consensus** |   |   |
+| **Cross-EIP interactions** (uncapped) |   |   |
 
 **Total: X**
 
@@ -261,16 +329,83 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 | Category | Description | Value |
 |-----------|--------------|:----:|
-| **Total Score** | Sum of all anchor scores (0–72) | **`XX`** |
+| **Total Score** | Sum of all anchor scores (0–84 nominal; **Cross-EIP interactions** is uncapped, so there is no hard maximum) | **`XX`** |
 | **Complexity Tier** | Computed from total score | 🟢 / 🟡 / 🔴 |
 
 ##### Tier Interpretation
 
 | Tier | Range | Meaning |
 |------|--------|----------|
-| 🟢 **Low Complexity** | **<10** | Minor feature or localized change. Existing tests are largely unaffected. Does not require intensive cross-EIP testing. |
-| 🟡 **Medium Complexity** | **>=10<20** | Moderate change affecting multiple components. Requires moderate cross-EIP testing. |
-| 🔴 **High Complexity** | **>=20** | Broad or deep impact on protocol behavior; high regression risk; and/or requiring intensive cross-EIP testing. |
+| 🟢 **Low Complexity** | **<12** | Minor feature or localized change. Existing tests are largely unaffected. Does not require intensive cross-EIP testing. |
+| 🟡 **Medium Complexity** | **>=12<23** | Moderate change affecting multiple components. Requires moderate cross-EIP testing. |
+| 🔴 **High Complexity** | **>=23** | Broad or deep impact on protocol behavior; high regression risk; and/or requiring intensive cross-EIP testing. |
+
+##### Revision Notes
+
+> Background only. Nothing here is needed to fill in the checklist — the anchor
+> definitions above are self-contained. Record the revision a completed
+> assessment was scored against at the top of the document; **scores are not
+> comparable across revisions**, so re-score rather than compare.
+
+###### Revision 2 — 28 anchors, nominal 0–84
+
+Five anchors were added, one was removed, and **Cross-EIP interactions** was
+uncapped: 24 anchors become 28.
+
+Tier thresholds were 10/20 against revision 1's 24-anchor, 72-point scale. They
+are scaled by 84/72 to 12/23 so that tier membership stays stable as the anchor
+set grows, rather than every EIP drifting upward a tier.
+
+The revision comes from
+[the Amsterdam calibration](../complexity_assessments/calibration/README.md),
+which measured each Amsterdam EIP's score against the work it actually produced in
+`ethereum/execution-specs`. Every mature Amsterdam EIP landed within ±3 of the
+score its measured work implies, except EIP-7928, which was short by 11 points
+with no rows left to score on — it had 29 of a possible 33 across the ten rows
+that applied to it. The five new rows are where that work should have been
+recorded. See
+[proposed-anchors.md](../complexity_assessments/calibration/proposed-anchors.md)
+for the evidence behind each one.
+
+Per-row notes:
+
+- **State-access ordering within opcode execution.** EIP-7928 made every state
+  access consensus-observable via the BAL. That was a one-time transition, so the
+  row is worded for the world after it: it scores EIPs that *move* the ordering,
+  not the introduction of observability. EIP-7928 itself scored 0 on **Modified
+  opcodes** — correctly, since final EVM semantics were unchanged — which is how
+  the most expensive part of its work scored zero under the previous revision.
+  Scored retroactively against this row it is a 3: it reordered gas-charge sites
+  across an entire class of opcodes. Any pre-Amsterdam EIP is a 0 regardless of
+  what it did internally, since intra-opcode ordering was not consensus then.
+- **New invariant on pre-existing tests.** Split out from **Patterns affecting
+  pre-existing tests**, which only captures *rework*. EIP-7928 scored 2 there and
+  would score 3 here: every Amsterdam test now validates a BAL whether or not it
+  has anything to do with access lists.
+- **State gas accounting changes.** State gas was introduced by EIP-8037. The
+  checklist had a row for blob gas and none for this.
+- **Cross-EIP interactions.** The `+1 per 3 additional EIPs` increment is a
+  judgement call, not a calibrated figure. It exists because EIP-7928 interacted
+  with 12 EIPs and scored the same 3 as an EIP interacting with three.
+- **Engine API encoding changes** was removed. It described a wire-format change
+  at the Engine API layer (JSON -> RLP/SSZ), but such migrations are coordinated
+  outside the EIP process, so an EIP-scoped assessment has no use for the row. It
+  was scored 0 or left blank in all 28 assessments written against revision 1, so
+  removing it changes no historical total, and it never had anchor level
+  definitions. **Encoding changes (RLP/SSZ)** covers the case if it ever arises —
+  that row already reads "transaction, block or interfaces level".
+
+One finding is deliberately **not** reflected in the scoring: some of this cost
+grows multiplicatively rather than additively, and no additive row at any weight
+reproduces EIP-7928's measured cost. A multiplier row was considered and deferred
+— with only one high-cost EIP observed, the data cannot identify which row should
+multiply. Until a second fork supplies a second observation, evaluators record
+multiplicative test-matrix growth under **Special Considerations**, as the
+State-access ordering anchor instructs.
+
+###### Revision 1 — 24 anchors, 0–72
+
+Original version.
 
 
 ## Consensus Specs
