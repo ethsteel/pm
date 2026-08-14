@@ -8,12 +8,12 @@ coverage and *structure*, not evaluator error.
 
 ## 1. The evidence that this is a coverage gap
 
-Back-solving each EIP's score from its measured work (`TEU = 0.38 × S^1.62`):
+Back-solving each EIP's score from its measured work (`TEU = 0.38 × S^1.63`):
 
 | EIP | Scored | Implied by measured work | Gap |
 |---|---:|---:|---:|
 | **7928** | **29** | **40** | **+11** |
-| 8037 | 28 | 27 | −1 |
+| 8037 | 28 | 26 | −2 |
 | 2780 | 13 | 11 | −2 |
 | 7778 | 10 | 9 | −1 |
 | 7843 | 7 | 6 | −1 |
@@ -64,16 +64,16 @@ Holding the new anchor's *score* fixed and changing only how it enters the total
 
 | How the same anchor enters the total | S(7928) | 7928 predicted out-of-sample | vs 150.3 actual |
 |---|---:|---:|---:|
-| not scored at all (today) | 29 | 61 | 0.40× |
-| additive 0–3 row | 32 | 67 | 0.45× |
-| additive row at 3× weight | 38 | 79 | 0.52× |
-| additive row at 5× weight | 44 | 89 | 0.59× |
-| **multiplier `× 2^(score/2)`** | **82** | **154** | **1.03×** |
+| not scored at all (today) | 29 | 60 | 0.39× |
+| additive 0–3 row | 32 | 67 | 0.43× |
+| additive row at 3× weight | 38 | 79 | 0.50× |
+| additive row at 5× weight | 44 | 89 | 0.57× |
+| **multiplier `× 2^(score/2)`** | **82** | **154** | **0.98×** |
 
 *(Fitted on the other eight mature EIPs only, then asked to predict 7928.)*
 
 Even at 5× weight — 15 additive points, more than a fifth of the whole 72-point
-scale — an additive row gets to 0.59×. This is not a tuning problem: a sum cannot
+scale — an additive row gets to 0.57×. This is not a tuning problem: a sum cannot
 approximate a product over this range.
 
 The evaluators already knew this: EIP-8037's checklist is written as `2 + 2 + 3 + 1`
@@ -89,16 +89,16 @@ Running the same test with every existing anchor as the multiplier
 
 | Anchor used as multiplier | 7928's score | Other EIPs scoring >0 | 7928 out-of-sample |
 |---|---:|---:|---:|
-| Security risks | 3 | 0 | 1.40× |
-| Engine API changes | 3 | 1 | 1.35× |
-| New block / header fields | 3 | 1 | **1.10×** |
-| Block syncing changes | 2 | 0 | **0.93×** |
-| Performance risks | 3 | 3 | 0.77× |
-| Transition-tool interface | 2 | 2 | 0.75× |
-| Cross-EIP interactions | 3 | 1 | 0.68× |
-| Edge/boundary conditions | 3 | 7 | 0.38× |
-| EVM Gas rule changes | 3 | 5 | 0.21× |
-| Patterns affecting pre-existing tests | 2 | 6 | 0.16× |
+| Security risks | 3 | 0 | 1.34× |
+| Engine API changes | 3 | 1 | 1.29× |
+| New block / header fields | 3 | 1 | **1.05×** |
+| Block syncing changes | 2 | 0 | **0.89×** |
+| Performance risks | 3 | 3 | 0.73× |
+| Transition-tool interface | 2 | 2 | 0.72× |
+| Cross-EIP interactions | 3 | 1 | 0.65× |
+| Edge/boundary conditions | 3 | 7 | 0.36× |
+| EVM Gas rule changes | 3 | 5 | 0.20× |
+| Patterns affecting pre-existing tests | 2 | 6 | 0.15× |
 
 **Six existing rows work about as well as the proposed one, and they work for a
 bad reason.** Look at the third column: the rows that "land" 7928 are exactly the
@@ -272,31 +272,31 @@ document the arithmetic, not to validate the choice of row.
 
 | Model | r | exponent k | LOO error | 7928 ratio | 8037 ratio |
 |---|---:|---:|---:|---:|---:|
-| current checklist | 0.920 | 1.62 | 21 % | 1.68 | 0.92 |
-| + the four additive rows only (U, P, R, G) | 0.916 | 1.55 | 31 % | 1.66 | 0.86 |
-| + state-access ordering as multiplier | 0.996 | 1.12 | 13 % | 0.97 | 1.20 |
-| **+ multiplier + state gas row** | **0.998** | **1.11** | **13 %** | **1.01** | **1.12** |
+| current checklist | 0.913 | 1.63 | 22 % | 1.72 | 0.90 |
+| + the four additive rows only (U, P, R, G) | 0.909 | 1.56 | 33 % | 1.70 | 0.85 |
+| + state-access ordering as multiplier | 0.997 | 1.13 | 13 % | 0.99 | 1.18 |
+| **+ multiplier + state gas row** | **0.999** | **1.12** | **13 %** | **1.02** | **1.10** |
 
 Note the second row: **the four additive anchors on their own make the fit
-slightly worse** (r 0.920 → 0.916, LOO 21 % → 31 %). They add points to 7928, but
+slightly worse** (r 0.913 → 0.909, LOO 22 % → 33 %). They add points to 7928, but
 they add points to almost everything else too, so the refitted curve moves with
-them and 7928's ratio barely budges (1.68 → 1.66). Only the multiplier changes
+them and 7928's ratio barely budges (1.72 → 1.70). Only the multiplier changes
 the shape. The additive rows are worth adding for coverage — they let evaluators
 record costs that currently have nowhere to go — but they are not what closes the
 gap on EIP-7928.
 
 ```
 S_eff = (base + underdetermination + framework + new_invariant + state_gas) × 2^(state_access_ordering / 2)
-TEU   = 0.83 × S_eff^1.11
+TEU   = 0.81 × S_eff^1.12
 ```
 
 Per EIP, with `add` = additive subtotal and `O` = the multiplier row:
 
 | EIP | base | U | P | R | G | add | O | S_eff | TEU | pred | ratio |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 7928 | 29 | 3 | 3 | 3 | 0 | 38 | 3 | 107.5 | 150.3 | 149.3 | **1.01** |
-| 8037 | 28 | 2 | 2 | 3 | 3 | 38 | 1 | 53.7 | 77.7 | 69.2 | 1.12 |
-| 8038 | 20 | 2 | 0 | 2 | 2 | 26 | 1 | 36.8 | 7.7 | 45.4 | 0.17 † |
+| 7928 | 29 | 3 | 3 | 3 | 0 | 38 | 3 | 107.5 | 156.7 | 153.0 | **1.02** |
+| 8037 | 28 | 2 | 2 | 3 | 3 | 38 | 1 | 53.7 | 77.7 | 70.4 | 1.10 |
+| 8038 | 20 | 2 | 0 | 2 | 2 | 26 | 1 | 36.8 | 7.7 | 46.1 | 0.17 † |
 | 2780 | 13 | 1 | 0 | 2 | 0 | 16 | 0 | 16.0 | 18.6 | 18.0 | 1.03 |
 | 7778 | 10 | 0 | 1 | 0 | 0 | 11 | 0 | 11.0 | 13.5 | 11.9 | 1.14 |
 | 7708 | 9 | 0 | 1 | 1 | 0 | 11 | 0 | 11.0 | 7.4 | 11.9 | 0.62 |
@@ -311,14 +311,14 @@ Per EIP, with `add` = additive subtotal and `O` = the multiplier row:
 
 ### The exponent collapses to ~1.1
 
-The 1.62 exponent in the current calibration behaves like **a power law
+The 1.63 exponent in the current calibration behaves like **a power law
 compensating for a missing multiplicative term**. Introduce a multiplicative term
 of roughly the right size and the residual super-linearity nearly vanishes — cost
 becomes close to linear in the effort-weighted score.
 
 This is suggestive rather than conclusive, and for the same reason as everything
 else here: any of the six candidate rows from §2b produces a similar collapse
-(exponents 1.07–1.36). What the collapse supports is the *shape* of the model —
+(exponents 1.08–1.36). What the collapse supports is the *shape* of the model —
 that some multiplicative term is missing — not the identity of the row supplying
 it. "Complexity is mysteriously super-linear" is probably the wrong reading; "the
 score is missing a product term" is the better one, and which product is still
@@ -358,7 +358,7 @@ supplies a second observation on the axis-count row.
 1. **`r = 0.998` is not a credible accuracy claim.** Nine points and a
    hand-assigned four-level variable can fit almost anything.
 2. **The out-of-sample test is weaker than it appears.** Fitting without 7928 and
-   predicting it (0.40× → 1.03×) rules out fitting to 7928's measured TEU. It does
+   predicting it (0.39× → 0.98×) rules out fitting to 7928's measured TEU. It does
    *not* rule out having picked a variable that singles 7928 out — and §2b shows
    six existing rows do just as well when made multiplicative, purely because
    7928 is the only EIP that scores them. With one high-cost EIP in the sample, no

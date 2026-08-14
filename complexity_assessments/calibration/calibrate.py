@@ -30,6 +30,7 @@ ASSESSMENTS = HERE.parent / "EIPs"
 SCORE_RE = re.compile(r"\|\s*\*\*Total Score\*\*\s*\|[^|]*\|\s*\**`?(\d+)`?\**\s*\|")
 ROW_RE = re.compile(r"^\|\s*\*\*(.+?)\*\*\s*\|([^|]*)\|", re.M)
 PR_RE = re.compile(r"\(#(\d+)\)\s*$")
+REVISION_RE = re.compile(r"Checklist revision:\s*\*\*(\d+)\*\*")
 EIP_TEXT_RE = re.compile(r"eip[-_ ]?(\d{4})", re.IGNORECASE)
 GIT_TS = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -44,13 +45,26 @@ MATURE_WEEKS = 10.0
 
 
 # --------------------------------------------------------------- assessments
-def read_assessments() -> tuple[dict[str, int], dict[str, dict[str, int]]]:
-    """Return {eip: total_score} and {eip: {anchor: score}} from the markdown."""
+def read_assessments(revision: int) -> tuple[dict[str, int], dict[str, dict[str, int]]]:
+    """Return {eip: total_score} and {eip: {anchor: score}} for one checklist revision.
+
+    Scores are not comparable across checklist revisions -- revision 2 added five
+    anchors and uncapped one -- so pooling them into a single regression silently
+    contaminates the fit. Assessments with no revision line predate the marker and
+    count as revision 1.
+    """
     scores: dict[str, int] = {}
     anchors: dict[str, dict[str, int]] = {}
+    skipped: dict[int, list[str]] = defaultdict(list)
     for path in sorted(ASSESSMENTS.glob("EIP-*.md")):
         eip = path.stem.split("-")[1]
         text = path.read_text()
+        m_rev = REVISION_RE.search(text)
+        found = int(m_rev.group(1)) if m_rev else 1
+        if found != revision:
+            if SCORE_RE.search(text):
+                skipped[found].append(eip)
+            continue
         if m := SCORE_RE.search(text):
             scores[eip] = int(m.group(1))
         start = text.find("### Checklist")
@@ -64,17 +78,52 @@ def read_assessments() -> tuple[dict[str, int], dict[str, dict[str, int]]]:
                 rows[name.strip()] = sum(nums)
         if rows:
             anchors[eip] = rows
+    for rev, eips in sorted(skipped.items()):
+        print(f"skipped {len(eips)} scored assessment(s) on revision {rev}: "
+              f"{', '.join(sorted(eips))}", file=sys.stderr)
     return scores, anchors
 
 
 # ------------------------------------------------------------------ git side
-def git_log(repo: Path, branch: str) -> list[dict]:
+def git(repo: Path, *args: str) -> str:
+    return subprocess.run(["git", "-C", str(repo), *args],
+                          capture_output=True, text=True, check=True).stdout
+
+
+def resolve_rev(repo: Path, rev: str) -> str:
+    """Pin the measurement to one commit.
+
+    Everything -- churn, PR set, and the file measures below -- is read from this
+    sha, so a re-run with the same --rev is byte-identical. Do not bound the log
+    by date instead: --until filters on committer date, which rebases mutate, and
+    it cannot exclude a commit rebased into the window later.
+    """
+    try:
+        return git(repo, "rev-parse", "--verify", f"{rev}^{{commit}}").strip()
+    except subprocess.CalledProcessError:
+        sys.exit(f"cannot resolve --rev {rev!r} in {repo}")
+
+
+def tip_date(repo: Path, rev: str) -> date:
+    """Commit date of the pinned rev, used as 'today' for the maturity cutoff."""
+    return date.fromisoformat(git(repo, "log", "-1", "--format=%ad",
+                                  "--date=short", rev).strip())
+
+
+def suites_at(repo: Path, fork: str, rev: str) -> dict[str, str]:
+    """{eip: dirname} for the EIP test suites present at `rev`."""
+    out = git(repo, "ls-tree", "-d", "--name-only", rev, f"tests/{fork}/")
+    found = {}
+    for line in out.splitlines():
+        if m := re.search(rf"tests/{fork}/(eip(\d+)_\S*)", line.strip()):
+            found[m.group(2)] = m.group(1)
+    return found
+
+
+def git_log(repo: Path, rev: str) -> list[dict]:
     """One entry per squash-merged commit, with numstat per file."""
-    out = subprocess.run(
-        ["git", "-C", str(repo), "log", branch, f"--since={WELD_DATE}", "--numstat",
-         "--no-merges", "--format=__C__%H|%ad|%an|%s", "--date=short"],
-        capture_output=True, text=True, check=True,
-    ).stdout
+    out = git(repo, "log", rev, f"--since={WELD_DATE}", "--numstat",
+              "--no-merges", "--format=__C__%H|%ad|%an|%s", "--date=short")
     commits: list[dict] = []
     cur: dict | None = None
     for line in out.splitlines():
@@ -118,11 +167,18 @@ def group_units(commits: list[dict]) -> dict[tuple[str, object], list[dict]]:
     return units
 
 
-def owners_of(unit: list[dict], fork: str) -> set[str]:
+def owners_of(unit: list[dict], fork: str, suites: set[str]) -> set[str]:
     """EIPs named in the subject win over EIPs whose directory was touched.
 
     A PR titled "merge EIP-8037 to forks/amsterdam" repairs eight other EIPs'
     tests as collateral. That is 8037's cost, not a cost shared eight ways.
+
+    Titles are intersected with `suites` first. Without that, any 4-digit EIP
+    mentioned in a subject becomes an owner -- 17 of them on forks/amsterdam,
+    e.g. "EIP-7825 test fix to avoid failures on EIP-7976 ci run". Such phantoms
+    have no row to be written to, so their units vanish from both the per-EIP
+    rows and the baseline (22 units), and they inflate `n = len(owners)`, which
+    dilutes the real owners' credit (EIP-7928 lost 2.0 PRs).
     """
     titled: set[str] = set()
     touched: set[str] = set()
@@ -132,7 +188,7 @@ def owners_of(unit: list[dict], fork: str) -> set[str]:
             kind, eip = classify(path, fork)
             if kind == "own":
                 touched.add(eip)
-    return titled or touched
+    return (titled & suites) or touched
 
 
 # ------------------------------------------------------------- github side
@@ -160,13 +216,15 @@ def fetch_prs(numbers: list[int], repo: str, batch: int = 25) -> dict[int, dict]
 
 
 # ------------------------------------------------------------------ measure
-def measure(repo: Path, fork: str, branch: str, gh_repo: str, today: date,
-            collect: bool, cached_cases: dict[str, int]) -> dict:
-    commits = git_log(repo, branch)
+def measure(repo: Path, fork: str, rev: str, gh_repo: str, today: date,
+            collect: bool, cached_cases: dict[str, int | None]) -> dict:
+    commits = git_log(repo, rev)
     units = group_units(commits)
+    suite_dirs = suites_at(repo, fork, rev)
+    suites = set(suite_dirs)
 
     pr_numbers = sorted({n for kind, n in units if kind == "pr"
-                         and owners_of(units[(kind, n)], fork)})
+                         and owners_of(units[(kind, n)], fork, suites)})
     print(f"{len(commits)} commits, {len(units)} work units, "
           f"{len(pr_numbers)} EIP-owned PRs", file=sys.stderr)
     pr_meta = fetch_prs(pr_numbers, gh_repo)
@@ -186,7 +244,7 @@ def measure(repo: Path, fork: str, branch: str, gh_repo: str, today: date,
                 if kind == "own":
                     acc[eip]["direct_churn"] += add + dele
 
-        owners = owners_of(unit, fork)
+        owners = owners_of(unit, fork, suites)
         if not owners:
             for c in unit:
                 for add, dele, path in c["files"]:
@@ -223,18 +281,19 @@ def measure(repo: Path, fork: str, branch: str, gh_repo: str, today: date,
                 for eip in owners:
                     lifetimes[eip].append(span)
 
-    cases = collect_cases(repo, fork) if collect else dict(cached_cases)
+    if collect:
+        cases, cases_source = collect_cases(repo, fork, rev), "collected"
+    else:
+        cases, cases_source = dict(cached_cases), "inherited"
 
     rows = []
-    for suite in sorted((repo / "tests" / fork).glob("eip*")):
-        eip = re.match(r"eip(\d+)_", suite.name).group(1)
-        py = list(suite.rglob("*.py"))
-        sources = [f.read_text(errors="replace") for f in py]
+    for eip, dirname in sorted(suite_dirs.items(), key=lambda kv: kv[1]):
+        sources = read_sources(repo, rev, f"tests/{fork}/{dirname}")
         a = acc[eip]
         first = min(days[eip]) if days[eip] else None
         rows.append({
             "eip": eip,
-            "dir": suite.name,
+            "dir": dirname,
             "prs": len(owned[eip]),
             "authors": len(authors[eip]),
             "active_days": len(days[eip]),
@@ -253,20 +312,59 @@ def measure(repo: Path, fork: str, branch: str, gh_repo: str, today: date,
             "median_pr_days": statistics.median(lifetimes[eip]) if lifetimes[eip] else None,
             "loc": sum(len(s.splitlines()) for s in sources),
             "test_funcs": sum(len(re.findall(r"^def test_", s, re.M)) for s in sources),
-            "py_files": len(py),
-            "cases": cases.get(eip, 0),
+            "py_files": len(sources),
+            # None, not 0, when the count is genuinely unknown -- a fabricated
+            # zero would silently produce a plausible-looking `filled cases` row.
+            "cases": cases.get(eip),
         })
     return {"eips": rows, "baseline": {k: int(v) for k, v in baseline.items()},
-            "n_units": len(units), "n_commits": len(commits)}
+            "n_units": len(units), "n_commits": len(commits),
+            "cases_source": cases_source}
 
 
-def collect_cases(repo: Path, fork: str) -> dict[str, int]:
+def read_sources(repo: Path, rev: str, prefix: str) -> list[str]:
+    """Python sources under `prefix` as of `rev`, read from git rather than disk.
+
+    Reading the working tree here would blend two repo states into one dataset:
+    churn and PR metrics come from `rev`, so the file measures must too.
+    """
+    names = [n for n in git(repo, "ls-tree", "-r", "--name-only", rev,
+                            f"{prefix}/").splitlines() if n.endswith(".py")]
+    if not names:
+        return []
+    # --batch sizes are byte counts, so the stream must be walked as bytes.
+    spec = "".join(f"{rev}:{n}\n" for n in names).encode()
+    out = subprocess.run(["git", "-C", str(repo), "cat-file", "--batch"],
+                         input=spec, capture_output=True, check=True).stdout
+    sources, pos = [], 0
+    for _ in names:
+        nl = out.index(b"\n", pos)
+        header = out[pos:nl].split()
+        if len(header) < 3:
+            sys.exit(f"unexpected cat-file header: {out[pos:nl]!r}")
+        size = int(header[2])
+        sources.append(out[nl + 1 : nl + 1 + size].decode(errors="replace"))
+        pos = nl + 1 + size + 1  # trailing newline after each blob
+    return sources
+
+
+def collect_cases(repo: Path, fork: str, rev: str) -> dict[str, int]:
     """Count filled test cases per EIP. Reported for completeness only -- see
-    README §5: vector counts track parametrization style, not work."""
+    README §5: vector counts track parametrization style, not work.
+
+    `fill` runs against the checkout, not against `rev`, so this is the one
+    measure that cannot be read from git; require the two to agree.
+    """
     fill = repo / ".venv/bin/fill"
     if not fill.exists():
-        print(f"  no {fill}; skipping case collection", file=sys.stderr)
-        return {}
+        sys.exit(f"--collect requires {fill}\n"
+                 "run `uv sync` in the specs repo, or drop --collect to inherit "
+                 "cached counts")
+    head = git(repo, "rev-parse", "HEAD").strip()
+    if head != rev:
+        sys.exit(f"--collect needs the checkout to match the measured rev\n"
+                 f"  HEAD {head[:12]} != rev {rev[:12]}\n"
+                 f"run `git -C {repo} checkout {rev[:12]}` or drop --collect")
     out = subprocess.run(
         [str(fill), "--collect-only", "-q", f"--until={fork.capitalize()}", f"tests/{fork}"],
         cwd=repo, capture_output=True, text=True,
@@ -360,6 +458,12 @@ def report(data: dict, scores: dict, anchors: dict) -> None:
     print(f"{'measure':18}{'r(all)':>9}{'r(mature)':>11}{'LOO%':>7}{'exponent k':>12}")
     print("-" * 57)
     for label, key in MEASURES:
+        # An unknown measure is omitted, never defaulted to 0: a fabricated row
+        # here would look exactly like a real one.
+        if any(r[key] is None for r in scored):
+            missing = sum(1 for r in scored if r[key] is None)
+            print(f"{label:18}{f'-- unknown for {missing}/{len(scored)} EIPs':>39}")
+            continue
         print(f"{label:18}"
               f"{pearson([r['score'] for r in scored], [r[key] for r in scored]):>9.3f}"
               f"{pearson([r['score'] for r in mature], [r[key] for r in mature]):>11.3f}"
@@ -388,7 +492,8 @@ def report(data: dict, scores: dict, anchors: dict) -> None:
                   f"no assessment; back-solved S ~ {(r['TEU'] / A) ** (1 / K):.0f}")
 
     print(f"\n{'=' * 72}\nPLANNING TABLE\n{'=' * 72}\n")
-    fits = {k: power_fit(mature, k) for _, k in MEASURES}
+    fits = {k: power_fit(mature, k) for _, k in MEASURES
+            if not any(r[k] is None for r in mature)}
     cols = [("TEU", "TEU"), ("PRs", "prs"), ("review", "review_load"),
             ("tests", "test_funcs"), ("LoC", "loc"), ("churn", "churn")]
     print(f"{'S':>4}{'tier':>5}" + "".join(f"{h:>9}" for h, _ in cols) + f"{'vs S=5':>9}")
@@ -444,31 +549,50 @@ def main() -> None:
     ap.add_argument("--specs-repo", type=Path, required=True,
                     help="clone of ethereum/execution-specs")
     ap.add_argument("--fork", default="amsterdam", help="fork name under tests/")
-    ap.add_argument("--branch", default=None, help="default: upstream/forks/<fork>")
+    ap.add_argument("--rev", default=None,
+                    help="commit or ref to measure; default: upstream/forks/<fork>. "
+                         "Reproduce a dataset by passing its recorded `rev`.")
     ap.add_argument("--gh-repo", default="ethereum/execution-specs")
     ap.add_argument("--collect", action="store_true",
-                    help="recount filled test cases via the execution-specs venv")
-    ap.add_argument("--today", default=None, help="YYYY-MM-DD, for reproducible week counts")
+                    help="recount filled test cases; needs the checkout to be at --rev")
+    ap.add_argument("--today", default=None,
+                    help="YYYY-MM-DD; default: the commit date of --rev")
+    ap.add_argument("--revision", type=int, default=1,
+                    help="checklist revision to fit; assessments on other revisions "
+                         "are skipped, since scores are not comparable across them")
     ap.add_argument("--out", type=Path, default=None,
                     help="default: <fork>-dataset.json beside this script")
     args = ap.parse_args()
 
-    branch = args.branch or f"upstream/forks/{args.fork}"
+    repo = args.specs_repo.expanduser()
+    rev = resolve_rev(repo, args.rev or f"upstream/forks/{args.fork}")
     out = args.out or HERE / f"{args.fork}-dataset.json"
-    today = date.fromisoformat(args.today) if args.today else date.today()
+    today = date.fromisoformat(args.today) if args.today else tip_date(repo, rev)
+    print(f"rev {rev[:12]}  as-of {today}  revision {args.revision}", file=sys.stderr)
 
-    cached: dict[str, int] = {}
-    if out.exists() and not args.collect:
-        cached = {r["eip"]: r.get("cases", 0)
-                  for r in json.loads(out.read_text()).get("eips", [])}
+    # `cases` cannot be derived from git (see collect_cases), so it is inherited
+    # from the dataset being replaced. Absent means unknown, not zero.
+    cached: dict[str, int | None] = {}
+    if out.is_file() and not args.collect:
+        try:
+            prior = json.loads(out.read_text())
+        except (ValueError, OSError):
+            prior = {}
+            print(f"note: {out} is not a readable dataset; `cases` will be "
+                  "unknown", file=sys.stderr)
+        cached = {r["eip"]: r.get("cases") for r in prior.get("eips", [])}
+        if prior.get("rev") and prior["rev"] != rev:
+            print(f"note: inheriting `cases` from a dataset measured at "
+                  f"{prior['rev'][:12]}", file=sys.stderr)
 
-    scores, anchors = read_assessments()
+    scores, anchors = read_assessments(args.revision)
     print(f"{len(scores)} assessments with a Total Score", file=sys.stderr)
 
-    data = measure(args.specs_repo.expanduser(), args.fork, branch, args.gh_repo,
-                   today, args.collect, cached)
+    data = measure(repo, args.fork, rev, args.gh_repo, today, args.collect, cached)
+    data["rev"] = rev
     data["generated_on"] = today.isoformat()
     data["fork"] = args.fork
+    data["checklist_revision"] = args.revision
     report(data, scores, anchors)
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"\nwrote {out}", file=sys.stderr)

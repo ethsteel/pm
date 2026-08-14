@@ -12,6 +12,7 @@ proposed-anchors.md §6 for why that limits what the fit statistics can claim.
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import re
@@ -19,7 +20,19 @@ import statistics
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+
+_ap = argparse.ArgumentParser(description=__doc__,
+                              formatter_class=argparse.RawDescriptionHelpFormatter)
+_ap.add_argument("--dataset", type=Path, default=HERE / "amsterdam-dataset.json",
+                 help="dataset to analyse; default: amsterdam-dataset.json beside "
+                      "this script. Point it at a --out from calibrate.py to check "
+                      "a re-run without touching the committed figures.")
+_ap.add_argument("--revision", type=int, default=1,
+                 help="checklist revision to read; scores are not comparable across "
+                      "revisions")
+ARGS = _ap.parse_args()
 SCORE_RE = re.compile(r"\|\s*\*\*Total Score\*\*\s*\|[^|]*\|\s*\**`?(\d+)`?\**\s*\|")
+REVISION_RE = re.compile(r"Checklist revision:\s*\*\*(\d+)\*\*")
 MATURE_WEEKS = 10.0
 
 # ---------------------------------------------------------------------------
@@ -48,12 +61,15 @@ def g(d: dict, eip: str) -> int:
 # ------------------------------------------------------------------ load data
 ROW_RE = re.compile(r"^\|\s*\*\*(.+?)\*\*\s*\|([^|]*)\|", re.M)
 
-data = json.loads((HERE / "amsterdam-dataset.json").read_text())
+data = json.loads(ARGS.dataset.read_text())
 scores: dict[str, int] = {}
 per_anchor: dict[str, dict[str, int]] = {}
 for f in sorted((HERE.parent / "EIPs").glob("EIP-*.md")):
     eip = f.stem.split("-")[1]
     txt = f.read_text()
+    m_rev = REVISION_RE.search(txt)
+    if (int(m_rev.group(1)) if m_rev else 1) != ARGS.revision:
+        continue
     if m := SCORE_RE.search(txt):
         scores[eip] = int(m.group(1))
     i = txt.find("### Checklist")
