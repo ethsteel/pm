@@ -1,6 +1,6 @@
 # EIP-NNNN: EIP Title
 
-Checklist revision: **2** (28 anchors) — see [Revision Notes](#revision-notes)
+Checklist revision: **2** (28 criteria) — see [Revision Notes](#revision-notes)
 
 Link: https://eips.ethereum.org/EIPS/eip-NNNN
 
@@ -12,9 +12,9 @@ TBD
 
 ### Testing
 
-#### Anchors
+#### Criteria
 
-All anchors are scored on a 0–3 scale. A score of 4 may be used in exceptional circumstances where the complexity or impact exceeds the defined anchors.
+Each criterion is scored 0–3 by matching the EIP to the level whose description fits it, not by judging severity on an abstract scale. A score of 4 may be used in exceptional circumstances where the EIP exceeds what level 3 describes; name the part it overruns in the rationale. **Cross-EIP interactions** is uncapped; every other criterion tops out at 3.
 
 ##### EVM Gas rule changes
 
@@ -280,11 +280,11 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 - 3. The EIP has strong interdependencies with multiple EIPs, requiring extensive coordinated cross-EIP testing as well as potential re-design of existing test vectors.
 - **+1 for every 3 additional interacting EIPs beyond the first 3**, each of which requires its own coordinated test cases. List the EIPs in the rationale.
 
-*This row is intentionally uncapped, unlike every other anchor: each interacting EIP is another axis of the test matrix, so a ceiling would make a 12-EIP product indistinguishable from a 3-EIP one.
+*This row is intentionally uncapped, unlike every other criterion: each interacting EIP is another axis of the test matrix, so a ceiling would make a 12-EIP product indistinguishable from a 3-EIP one.
 
 ### Checklist
 
-| Anchor | Score (0–3) | Rationale |
+| Criterion | Score (0–3) | Rationale |
 |---|---:|---|
 | **EVM Gas rule changes** |   |   |
 | **State-access ordering within opcode execution** |   |   |
@@ -329,7 +329,7 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 | Category | Description | Value |
 |-----------|--------------|:----:|
-| **Total Score** | Sum of all anchor scores (0–84 nominal; **Cross-EIP interactions** is uncapped, so there is no hard maximum) | **`XX`** |
+| **Total Score** | Sum of all criterion scores (0–84 nominal; **Cross-EIP interactions** is uncapped, so there is no hard maximum) | **`XX`** |
 | **Complexity Tier** | Computed from total score | 🟢 / 🟡 / 🔴 |
 
 ##### Tier Interpretation
@@ -342,18 +342,18 @@ Introduces or modifies mechanisms that affect other EIPs in either the same or p
 
 ##### Revision Notes
 
-> Background only. Nothing here is needed to fill in the checklist — the anchor
+> Background only. Nothing here is needed to fill in the checklist — the criterion
 > definitions above are self-contained. Record the revision a completed
 > assessment was scored against at the top of the document; **scores are not
 > comparable across revisions**, so re-score rather than compare.
 
-###### Revision 2 — 28 anchors, nominal 0–84
+###### Revision 2 — 28 criteria, nominal 0–84
 
-Five anchors were added, one was removed, and **Cross-EIP interactions** was
-uncapped: 24 anchors become 28.
+Five criteria were added, one was removed, and **Cross-EIP interactions** was
+uncapped: 24 criteria become 28.
 
-Tier thresholds were 10/20 against revision 1's 24-anchor, 72-point scale. They
-are scaled by 84/72 to 12/23 so that tier membership stays stable as the anchor
+Tier thresholds were 10/20 against revision 1's 24-criterion, 72-point scale. They
+are scaled by 84/72 to 12/23 so that tier membership stays stable as the criterion
 set grows, rather than every EIP drifting upward a tier.
 
 The revision comes from
@@ -364,7 +364,7 @@ score its measured work implies, except EIP-7928, which was short by 11 points
 with no rows left to score on — it had 29 of a possible 33 across the ten rows
 that applied to it. The five new rows are where that work should have been
 recorded. See
-[proposed-anchors.md](../complexity_assessments/calibration/proposed-anchors.md)
+[proposed-criteria.md](../complexity_assessments/calibration/proposed-criteria.md)
 for the evidence behind each one.
 
 Per-row notes:
@@ -391,7 +391,7 @@ Per-row notes:
   at the Engine API layer (JSON -> RLP/SSZ), but such migrations are coordinated
   outside the EIP process, so an EIP-scoped assessment has no use for the row. It
   was scored 0 or left blank in all 28 assessments written against revision 1, so
-  removing it changes no historical total, and it never had anchor level
+  removing it changes no historical total, and it never had level
   definitions. **Encoding changes (RLP/SSZ)** covers the case if it ever arises —
   that row already reads "transaction, block or interfaces level".
 
@@ -401,9 +401,9 @@ reproduces EIP-7928's measured cost. A multiplier row was considered and deferre
 — with only one high-cost EIP observed, the data cannot identify which row should
 multiply. Until a second fork supplies a second observation, evaluators record
 multiplicative test-matrix growth under **Special Considerations**, as the
-State-access ordering anchor instructs.
+State-access ordering criterion instructs.
 
-###### Revision 1 — 24 anchors, 0–72
+###### Revision 1 — 24 criteria, 0–72
 
 Original version.
 

@@ -46,15 +46,15 @@ MATURE_WEEKS = 10.0
 
 # --------------------------------------------------------------- assessments
 def read_assessments(revision: int) -> tuple[dict[str, int], dict[str, dict[str, int]]]:
-    """Return {eip: total_score} and {eip: {anchor: score}} for one checklist revision.
+    """Return {eip: total_score} and {eip: {criterion: score}} for one checklist revision.
 
     Scores are not comparable across checklist revisions -- revision 2 added five
-    anchors and uncapped one -- so pooling them into a single regression silently
+    criteria and uncapped one -- so pooling them into a single regression silently
     contaminates the fit. Assessments with no revision line predate the marker and
     count as revision 1.
     """
     scores: dict[str, int] = {}
-    anchors: dict[str, dict[str, int]] = {}
+    criteria: dict[str, dict[str, int]] = {}
     skipped: dict[int, list[str]] = defaultdict(list)
     for path in sorted(ASSESSMENTS.glob("EIP-*.md")):
         eip = path.stem.split("-")[1]
@@ -73,15 +73,15 @@ def read_assessments(revision: int) -> tuple[dict[str, int], dict[str, dict[str,
         end = text.find("#### Special", start)
         rows = {}
         for name, value in ROW_RE.findall(text[start : end if end > 0 else len(text)]):
-            # Cells read "3 + 3 + 3" when an anchor is counted more than once.
+            # Cells read "3 + 3 + 3" when a criterion is counted more than once.
             if nums := [int(x) for x in re.findall(r"\d+", value)]:
                 rows[name.strip()] = sum(nums)
         if rows:
-            anchors[eip] = rows
+            criteria[eip] = rows
     for rev, eips in sorted(skipped.items()):
         print(f"skipped {len(eips)} scored assessment(s) on revision {rev}: "
               f"{', '.join(sorted(eips))}", file=sys.stderr)
-    return scores, anchors
+    return scores, criteria
 
 
 # ------------------------------------------------------------------ git side
@@ -430,7 +430,7 @@ MEASURES = [("TEU", "TEU"), ("merged PRs", "prs"), ("review load", "review_load"
             ("total churn", "churn"), ("filled cases", "cases")]
 
 
-def report(data: dict, scores: dict, anchors: dict) -> None:
+def report(data: dict, scores: dict, criteria: dict) -> None:
     for r in data["eips"]:
         r["score"] = scores.get(r["eip"])
         r["churn"] = r["direct_churn"] + r["ripple_churn"]
@@ -512,16 +512,16 @@ def report(data: dict, scores: dict, anchors: dict) -> None:
     print(f"  sum of per-EIP predictions: {per_eip:.0f} TEU   <- apply the curve per EIP")
     print(f"  curve applied to summed score: {summed:.0f} TEU   <- wrong, {summed / per_eip:.1f}x too high")
 
-    if anchors:
-        print(f"\n{'=' * 72}\nPER-ANCHOR SIGNAL\n{'=' * 72}\n")
-        eips = [r["eip"] for r in scored if r["eip"] in anchors]
+    if criteria:
+        print(f"\n{'=' * 72}\nPER-CRITERION SIGNAL\n{'=' * 72}\n")
+        eips = [r["eip"] for r in scored if r["eip"] in criteria]
         by_eip = {r["eip"]: r for r in scored}
-        names = sorted({k for e in eips for k in anchors[e]})
-        print(f"{'anchor':46}{'n>0':>5}{'r:churn':>9}{'r:funcs':>9}")
+        names = sorted({k for e in eips for k in criteria[e]})
+        print(f"{'criterion':46}{'n>0':>5}{'r:churn':>9}{'r:funcs':>9}")
         print("-" * 69)
         table = []
         for name in names:
-            xs = [anchors[e].get(name, 0) for e in eips]
+            xs = [criteria[e].get(name, 0) for e in eips]
             if not any(xs):
                 continue
             table.append((
@@ -532,11 +532,11 @@ def report(data: dict, scores: dict, anchors: dict) -> None:
         for nz, name, rc, rf in sorted(table, key=lambda t: -t[2]):
             warn = "  (single observation)" if nz <= 2 else ""
             print(f"{name[:45]:46}{nz:>5}{rc:>9.2f}{rf:>9.2f}{warn}")
-        xs = [sum(anchors[e].values()) for e in eips]
+        xs = [sum(criteria[e].values()) for e in eips]
         print(f"{'TOTAL (all rows)':46}{len(eips):>5}"
               f"{pearson(xs, [by_eip[e]['churn'] for e in eips]):>9.2f}"
               f"{pearson(xs, [by_eip[e]['test_funcs'] for e in eips]):>9.2f}")
-        unused = [n for n in names if not any(anchors[e].get(n, 0) for e in eips)]
+        unused = [n for n in names if not any(criteria[e].get(n, 0) for e in eips)]
         if unused:
             print(f"\nnever scored above 0 in this fork (no evidence either way):")
             for n in unused:
@@ -585,7 +585,7 @@ def main() -> None:
             print(f"note: inheriting `cases` from a dataset measured at "
                   f"{prior['rev'][:12]}", file=sys.stderr)
 
-    scores, anchors = read_assessments(args.revision)
+    scores, criteria = read_assessments(args.revision)
     print(f"{len(scores)} assessments with a Total Score", file=sys.stderr)
 
     data = measure(repo, args.fork, rev, args.gh_repo, today, args.collect, cached)
@@ -593,7 +593,7 @@ def main() -> None:
     data["generated_on"] = today.isoformat()
     data["fork"] = args.fork
     data["checklist_revision"] = args.revision
-    report(data, scores, anchors)
+    report(data, scores, criteria)
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"\nwrote {out}", file=sys.stderr)
 
