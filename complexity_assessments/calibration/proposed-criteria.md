@@ -1,4 +1,4 @@
-# Proposed Checklist Anchors
+# Proposed Checklist Criteria
 
 Derived from the [Amsterdam calibration](README.md). EIP-7928 is the only mature
 Amsterdam EIP the current checklist materially mis-scores, and the reason is
@@ -36,7 +36,7 @@ opcodes, no cryptography, no new transaction types). There was no room left.
 
 > Final EVM semantics (gas charged, state changes, reverts) are unchanged. Only
 > the observation order for BAL inclusion is constrained, which is a
-> spec-framework concern, not a behavior change in the anchor's sense.
+> spec-framework concern, not a behavior change in the criterion's sense.
 
 That is the checklist applied *correctly*, and it assigns zero to the single most
 expensive part of the work. Whether an opcode runs out of gas **before or after**
@@ -60,9 +60,9 @@ that line falls for every state-accessing opcode. In the repo this shows up as:
 ```
 
 An additive 0–3 checklist cannot express a product. Adding rows does not fix it.
-Holding the new anchor's *score* fixed and changing only how it enters the total:
+Holding the new criterion's *score* fixed and changing only how it enters the total:
 
-| How the same anchor enters the total | S(7928) | 7928 predicted out-of-sample | vs 150.3 actual |
+| How the same criterion enters the total | S(7928) | 7928 predicted out-of-sample | vs 150.3 actual |
 |---|---:|---:|---:|
 | not scored at all (today) | 29 | 60 | 0.39× |
 | additive 0–3 row | 32 | 67 | 0.43× |
@@ -84,10 +84,10 @@ state-access ordering row is the multiplier — see the next section.**
 
 ## 2b. Why the data cannot identify *which* row is the multiplier
 
-Running the same test with every existing anchor as the multiplier
+Running the same test with every existing criterion as the multiplier
 (`S_eff = (base − row) × 2^(row/2)`, so the row isn't double-counted):
 
-| Anchor used as multiplier | 7928's score | Other EIPs scoring >0 | 7928 out-of-sample |
+| Criterion used as multiplier | 7928's score | Other EIPs scoring >0 | 7928 out-of-sample |
 |---|---:|---:|---:|
 | Security risks | 3 | 0 | 1.34× |
 | Engine API changes | 3 | 1 | 1.29× |
@@ -133,7 +133,7 @@ The resolution is arithmetic: axes **add in the exponent**
 whose score counts axes, scored independently of the severity rows — not N
 individually multiplicative rows.
 
-## 3. Proposed anchors
+## 3. Proposed criteria
 
 ### 3.1 State-access ordering within opcode execution — additive
 
@@ -277,7 +277,7 @@ document the arithmetic, not to validate the choice of row.
 | + state-access ordering as multiplier | 0.997 | 1.13 | 13 % | 0.99 | 1.18 |
 | **+ multiplier + state gas row** | **0.999** | **1.12** | **13 %** | **1.02** | **1.10** |
 
-Note the second row: **the four additive anchors on their own make the fit
+Note the second row: **the four additive criteria on their own make the fit
 slightly worse** (r 0.913 → 0.909, LOO 22 % → 33 %). They add points to 7928, but
 they add points to almost everything else too, so the refitted curve moves with
 them and 7928's ratio barely budges (1.72 → 1.70). Only the multiplier changes
@@ -326,7 +326,7 @@ open.
 
 ## 5. Tier rescaling
 
-**As adopted in the template** (additive rows only, no multiplier): the anchor set
+**As adopted in the template** (additive rows only, no multiplier): the criterion set
 goes 24 → 28 rows — five added, **Engine API encoding changes** removed — so the
 nominal ceiling is 72 → 84, and **Cross-EIP interactions** is uncapped on top of
 that. Thresholds scale by 84/72: 🟢 `<12`, 🟡 `12–22`, 🔴 `≥23`. Amsterdam tier
@@ -383,6 +383,6 @@ supplies a second observation on the axis-count row.
 
 ## 7. Reproducing
 
-The scoring tables and every figure above come from `proposed-anchors.py`, which
+The scoring tables and every figure above come from `proposed-criteria.py`, which
 reads `amsterdam-dataset.json`. Re-run after Amsterdam ships — 8038, 8070 and
 7997 are still truncated and will change the picture.

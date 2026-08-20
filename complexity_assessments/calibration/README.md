@@ -66,7 +66,7 @@ Fit only the seven mature 🟢/🟡 EIPs (scores 5–13) and the exponent collap
 1.63 exponent is produced entirely by the jump to EIP-7928 (29) and EIP-8037 (28).
 So read the power law as a smooth interpolation across a step, not as evidence
 that each additional point costs more than the last. Both readings give the same
-planning numbers at the anchors; they disagree in the 16–25 gap, where Amsterdam
+planning numbers at the observed scores; they disagree in the 16–25 gap, where Amsterdam
 has no observations at all.
 
 ## 3. Planning table
@@ -149,14 +149,14 @@ Test-function counts have a milder version of the same problem — EIP-8024 wrot
 68 functions on a score of 6, EIP-7976 wrote 10 on a score of 5 while generating
 1 598 cases. TEU avoids both by counting process events instead of code.
 
-## 6. Which anchors are actually earning their keep
+## 6. Which criteria are actually earning their keep
 
-Per-anchor scores parsed from all 12 assessments and correlated against measured
+Per-criterion scores parsed from all 12 assessments and correlated against measured
 work. *The total beats every individual row and every thematic group* — the
 checklist as a whole is the signal, which is the strongest possible endorsement
 of its current design.
 
-| Anchor / group | r vs churn | r vs test funcs | n>0 |
+| Criterion / group | r vs churn | r vs test funcs | n>0 |
 |---|---:|---:|---:|
 | **TOTAL (all rows)** | **0.82** | **0.91** | 12 |
 | Edge/boundary conditions | 0.63 | 0.77 | 9 |
@@ -173,8 +173,8 @@ Notes:
   driver** (0.76 vs test functions, 0.34 vs churn). Breaking existing tests means
   writing many more cases, not rewriting more lines than usual.
 - **"Edge/boundary conditions"** is the best-populated high-signal row and the
-  single most broadly useful anchor.
-- Six anchors were **never scored above 0** in Amsterdam: added precompiles,
+  single most broadly useful criterion.
+- Six criteria were **never scored above 0** in Amsterdam: added precompiles,
   modified precompiles, cryptography-related testing, new transaction types,
   encoding changes (RLP/SSZ), Engine API encoding changes. No evidence either
   way — Amsterdam simply has no precompile or encoding work. Do not prune them
@@ -188,7 +188,7 @@ Notes:
    Amsterdam-shaped. Drop EIP-7928 and EIP-8037 and the exponent falls from 1.63
    to **0.79**. The power law is the better *model* by a wide margin (7× better
    LOO error than linear), but that verdict rests on two observations at the top
-   of the range. Treat the curve as reliable *at* the tier anchors and
+   of the range. Treat the curve as reliable *at* the tier boundaries and
    provisional *between* them until a second fork is measured.
 2. **Discrimination is poor within a tier.** Score vs PRs is r = 0.80 over the
    full range but only **r = 0.36** once the two reds are removed. The assessment
@@ -214,13 +214,13 @@ Notes:
 # from a clone of ethereum/execution-specs; --rev is the `rev` in the dataset
 python3 calibrate.py --specs-repo ~/path/to/execution-specs \
     --rev 987b8653 --out /tmp/check.json
-python3 proposed-anchors.py --dataset /tmp/check.json
+python3 proposed-criteria.py --dataset /tmp/check.json
 ```
 
 That reproduces every table above without touching the committed files. Drop
-`--out` only when you intend to replace the dataset — `proposed-anchors.py`
+`--out` only when you intend to replace the dataset — `proposed-criteria.py`
 reads it by default, so overwriting it silently moves every figure in
-[proposed-anchors.md](proposed-anchors.md) too.
+[proposed-criteria.md](proposed-criteria.md) too.
 
 Everything is read from `--rev`: churn, PR set, and the per-suite `loc`,
 `test_funcs` and `py_files`, so the checkout state does not matter. `--today`

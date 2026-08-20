@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Evaluate proposed checklist anchors against measured Amsterdam work.
+"""Evaluate proposed checklist criteria against measured Amsterdam work.
 
 Reads amsterdam-dataset.json (produced by calibrate.py) and reproduces every
-figure in proposed-anchors.md. Stdlib only.
+figure in proposed-criteria.md. Stdlib only.
 
-    python3 proposed-anchors.py
+    python3 proposed-criteria.py
 
 The proposed scores below are assigned in hindsight from repo evidence -- see
-proposed-anchors.md §6 for why that limits what the fit statistics can claim.
+proposed-criteria.md §6 for why that limits what the fit statistics can claim.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ REVISION_RE = re.compile(r"Checklist revision:\s*\*\*(\d+)\*\*")
 MATURE_WEEKS = 10.0
 
 # ---------------------------------------------------------------------------
-# Proposed anchor scores. Evidence for each is cited in proposed-anchors.md §3.
+# Proposed criterion scores. Evidence for each is cited in proposed-criteria.md §3.
 #
 #   O  state-access ordering within opcodes    -- additive (see note below)
 #   G  state gas accounting changes            -- additive
@@ -63,7 +63,7 @@ ROW_RE = re.compile(r"^\|\s*\*\*(.+?)\*\*\s*\|([^|]*)\|", re.M)
 
 data = json.loads(ARGS.dataset.read_text())
 scores: dict[str, int] = {}
-per_anchor: dict[str, dict[str, int]] = {}
+per_criterion: dict[str, dict[str, int]] = {}
 for f in sorted((HERE.parent / "EIPs").glob("EIP-*.md")):
     eip = f.stem.split("-")[1]
     txt = f.read_text()
@@ -78,11 +78,11 @@ for f in sorted((HERE.parent / "EIPs").glob("EIP-*.md")):
     j = txt.find("#### Special", i)
     rows_ = {}
     for name, val in ROW_RE.findall(txt[i: j if j > 0 else len(txt)]):
-        # cells read "3 + 3 + 3" when an anchor is counted more than once
+        # cells read "3 + 3 + 3" when a criterion is counted more than once
         if nums := [int(x) for x in re.findall(r"\d+", val)]:
             rows_[name.strip()] = sum(nums)
     if rows_:
-        per_anchor[eip] = rows_
+        per_criterion[eip] = rows_
 
 for r in data["eips"]:
     r["TEU"] = round(r["prs"] + r["review_load"] / 10, 1)
@@ -144,7 +144,7 @@ for r in sorted(rows, key=lambda r: -r["TEU"]):
 
 # ------------------------------------------------- §2 additive vs multiplier
 print("\n" + "=" * 74)
-print("2. THE SAME ANCHOR, ADDED vs MULTIPLIED")
+print("2. THE SAME CRITERION, ADDED vs MULTIPLIED")
 print("=" * 74)
 print("\nO scored identically in every row; only how it enters the total changes.")
 print("Fit on the 8 other mature EIPs, then predict 7928.\n")
@@ -164,24 +164,24 @@ for label, fn in STRUCTURES:
 
 # ------------------------------------- §3 can the data identify the multiplier?
 print("\n" + "=" * 74)
-print("3. TRY EVERY EXISTING ANCHOR AS THE MULTIPLIER")
+print("3. TRY EVERY EXISTING CRITERION AS THE MULTIPLIER")
 print("=" * 74)
 print("\nS_eff = (base - row) x 2^(row/2), so the row is not double-counted.")
 print("If many rows work, the data cannot identify which row is multiplicative.\n")
-print(f"{'anchor used as multiplier':44}{'7928':>6}{'others>0':>10}{'LOO':>7}{'OOS':>8}")
+print(f"{'criterion used as multiplier':44}{'7928':>6}{'others>0':>10}{'LOO':>7}{'OOS':>8}")
 print("-" * 75)
-live = [n for n in sorted({n for e in per_anchor for n in per_anchor[e]})
-        if any(per_anchor[e].get(n, 0) for e in (r["eip"] for r in mature)
-               if e in per_anchor)]
+live = [n for n in sorted({n for e in per_criterion for n in per_criterion[e]})
+        if any(per_criterion[e].get(n, 0) for e in (r["eip"] for r in mature)
+               if e in per_criterion)]
 sweep = []
 for n in live:
     def sf(e, n=n):
-        row = per_anchor.get(e, {}).get(n, 0)
+        row = per_criterion.get(e, {}).get(n, 0)
         return max(BASE[e] - row, 1) * MULT_BASE ** (row / 2)
     pred, actual = out_of_sample(mature, sf)
     others = sum(1 for r in mature
-                 if r["eip"] != "7928" and per_anchor.get(r["eip"], {}).get(n, 0))
-    sweep.append((pred / actual, n, per_anchor.get("7928", {}).get(n, 0),
+                 if r["eip"] != "7928" and per_criterion.get(r["eip"], {}).get(n, 0))
+    sweep.append((pred / actual, n, per_criterion.get("7928", {}).get(n, 0),
                   others, loo(mature, sf)))
 for oos, n, s7, others, l in sorted(sweep, key=lambda t: -t[0]):
     mark = "  <-- lands it" if 0.85 <= oos <= 1.2 else ""
@@ -196,7 +196,7 @@ DIM = ["Patterns affecting pre-existing tests", "Cross-EIP interactions",
        "New transaction types", "Encoding changes (RLP/SSZ)"]
 print(f"{'EIP':>6}{'base':>6}{'product of 2^(row/2) over 4 dimensional rows':>46}{'S_eff':>8}")
 for e in sorted((r["eip"] for r in rows), key=lambda e: -BASE[e])[:4]:
-    prod = math.prod(MULT_BASE ** (per_anchor.get(e, {}).get(n, 0) / 2) for n in DIM)
+    prod = math.prod(MULT_BASE ** (per_criterion.get(e, {}).get(n, 0) / 2) for n in DIM)
     print(f"{e:>6}{BASE[e]:>6}{prod:>46.1f}{BASE[e] * prod:>8.0f}")
 print("\n8037's 'pre-existing tests' cell is written '3 + 3 + 3' = 9, so a")
 print("multiplicative reading gives it 2^4.5 = 22.6x. Compounding is unusable:")
